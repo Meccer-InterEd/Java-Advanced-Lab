@@ -65,6 +65,7 @@ public class Order {
             System.out.println("Payment status updated to " + paymentStatus);
         }
     }
+    // added the  free delivary and after the collection
     public BigDecimal calculateFreeDelivery() {
         if (deliveryMethod == DeliveryMethod.COLLECTION) {
             return new BigDecimal("0.00");
