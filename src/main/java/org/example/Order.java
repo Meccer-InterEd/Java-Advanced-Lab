@@ -1,4 +1,4 @@
-package org.example.Lab01_Enum_FoodDelivaryOrder;
+package org.example;
 
 import java.math.BigDecimal;
 
@@ -48,7 +48,7 @@ public class Order {
 
         this.totalAmount = totalAmount;
     }
-
+// payment status  for payment
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         if (this.status == OrderStatus.DELIVERED || this.status == OrderStatus.CANCELLED) {
             System.out.println("Cannot change payment on a closed order.");
@@ -77,7 +77,7 @@ public class Order {
         }}
 
 
-    //
+    // add confirmation for order
     public void confirmingOrder() {
         if (paymentStatus != PaymentStatus.PAID) {
             System.out.println("Order cannot be confirmed when payment is not successful.");
