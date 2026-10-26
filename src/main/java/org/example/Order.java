@@ -4,10 +4,10 @@ public class Order {
     private String orderNumber;
     private String customerName;
     private double totalAmount;
-    private String status;
-    private String deliveryMethod;
+    private PaymentStatus status;
+    private DeliveryMethod deliveryMethod;
 
-    public Order(String orderNumber, String customerName, double totalAmount, String status, String deliveryMethod) {
+    public Order(String orderNumber, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod) {
         setOrderNumber(orderNumber);
         setCustomerName(customerName);
         setTotalAmount(totalAmount);
@@ -19,8 +19,8 @@ public class Order {
     public String getOrderNumber() {return orderNumber;}
     public String getCustomerName() {return customerName;}
     public double getTotalAmount() {return totalAmount;}
-    public String getStatus() {return status;}
-    public String getDeliveryMethod() {return deliveryMethod;}
+    public PaymentStatus getStatus() {return status;}
+    public DeliveryMethod getDeliveryMethod() {return deliveryMethod;}
 
     public void setOrderNumber(String orderNumber) {
         if(orderNumber != null && !orderNumber.isEmpty()) {
@@ -47,8 +47,8 @@ public class Order {
         }
     }
 
-    public void setStatus(String status) {
-        if(status != null && !status.isEmpty()) {
+    public void setStatus(PaymentStatus status) {
+        if(status != null) {
             this.status = status;
         } else {
             throw new IllegalArgumentException("Status can not be empty");
@@ -56,12 +56,12 @@ public class Order {
 
     }
 
-
-    public void setDeliveryMethod(String deliveryMethod) {
-        if(status != null && !status.isEmpty()) {
+    public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
+        if(status != null) {
             this.deliveryMethod = deliveryMethod;
         } else {
             throw new IllegalArgumentException(" Delivery method can not be empty");
         }
     }
+
 }
