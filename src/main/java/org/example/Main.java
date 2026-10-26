@@ -11,13 +11,15 @@ public class Main {
                     DeliveryMethod.STANDARD_DELIVERY
             );
             order.Pay(new BigDecimal("285.00"));
+            order.orderProgress();
+            order.orderSummary();
 
-            Order order2 = new Order(
-                    "ORD-1002",
-                    "Thato",
-                    new BigDecimal("260.00"),
-                    DeliveryMethod.COLLECTION
-            );
-            order2.Pay(new BigDecimal("290.00"));
+//            Order order2 = new Order(
+//                    "ORD-1002",
+//                    "Thato",
+//                    new BigDecimal("260.00"),
+//                    DeliveryMethod.COLLECTION
+//            );
+//            order2.Pay(new BigDecimal("290.00"));
         }
     }

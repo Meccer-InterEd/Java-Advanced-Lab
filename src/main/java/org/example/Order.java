@@ -13,6 +13,9 @@ public class Order {
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
     private DeliveryMethod deliveryMethod;
+    private BigDecimal finalAmount;
+    private BigDecimal deliveryFee;
+    private boolean didUserCancel;
 
     public Order(String order_number, String customer_name, BigDecimal total_amount, DeliveryMethod
                  delivery_method) throws InterruptedException {
@@ -27,20 +30,36 @@ public class Order {
         deliveryMethod = delivery_method;
         orderStatus = OrderStatus.PLACED;
         paymentStatus = PaymentStatus.PENDING;
+        didUserCancel = false;
     }
 
     public void Pay(BigDecimal amount) throws InterruptedException {
-        totalAmount = totalAmount.add(deliveryMethod.getDeliveryFee());
+        deliveryFee = deliveryMethod.getDeliveryFee();
+        finalAmount = totalAmount.add(deliveryFee);
         if (amount.compareTo(totalAmount) >= 0){
             paymentPaid("\nPayment successful!!");
             orderConfirmed("\nOrder has been confirmed",orderNumber);
             delayExecution(5000);
             orderPreparing("\nOrder is being prepared",orderNumber);
-            orderProgress();
+//            orderProgress();
         } else {
             paymentFailed("\nPayment failed due to insufficient funds!!!");
             orderCancelled("\nOrder has been cancelled due to non-payment",orderNumber);
         }
+    }
+
+    public void orderSummary(){
+        System.out.println("============Order Summary============");
+        System.out.println("Customer Name: "+customerName);
+        System.out.println("Order Number: "+orderNumber);
+        System.out.println("Order Payment Status: "+paymentStatus);
+        System.out.println("Order Status: "+orderStatus);
+        System.out.println("Order Delivery Method: "+deliveryMethod);
+        System.out.println("--------------------------------------");
+        System.out.println("Order Items Cost Price: "+totalAmount);
+        System.out.println("Delivery Fee: "+deliveryFee);
+        System.out.println("Final Cost: "+finalAmount);
+        System.out.println("--------------------------------------");
     }
 
     private void paymentPaid(String message){
@@ -87,20 +106,24 @@ public class Order {
         Thread.sleep(milliseconds);
     }
 
-    private void orderProgress() throws InterruptedException {
-        if (deliveryMethod == DeliveryMethod.COLLECTION){
-            delayExecution(7000);
-            orderReadyForCollection("\nThe order is ready for collection",orderNumber);
-        } else if (deliveryMethod == DeliveryMethod.STANDARD_DELIVERY){
-            delayExecution(7000);
-            orderOutForDelivery("\nThe order is out for delivery",orderNumber);
-            delayExecution(7000);
-            orderDelivered("\nOrder delivered",orderNumber);
+    public void orderProgress() throws InterruptedException {
+        if (!didUserCancel){
+            if (deliveryMethod == DeliveryMethod.COLLECTION){
+                delayExecution(7000);
+                orderReadyForCollection("\nThe order is ready for collection",orderNumber);
+            } else if (deliveryMethod == DeliveryMethod.STANDARD_DELIVERY){
+                delayExecution(7000);
+                orderOutForDelivery("\nThe order is out for delivery",orderNumber);
+                delayExecution(7000);
+                orderDelivered("\nOrder delivered",orderNumber);
+            } else {
+                delayExecution(5000);
+                orderOutForDelivery("\nThe order is out for delivery",orderNumber);
+                delayExecution(4000);
+                orderDelivered("\nOrder delivered",orderNumber);
+            }
         } else {
-            delayExecution(5000);
-            orderOutForDelivery("\nThe order is out for delivery",orderNumber);
-            delayExecution(4000);
-            orderDelivered("\nOrder delivered",orderNumber);
+            System.out.println("\n Cannot progress to the next stage with the order, as it has been cancelled!!!");
         }
     }
 }
