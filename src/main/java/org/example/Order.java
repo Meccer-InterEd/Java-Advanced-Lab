@@ -15,9 +15,14 @@ public class Order {
     private DeliveryMethod deliveryMethod;
 
     public Order(String order_number, String customer_name, BigDecimal total_amount, DeliveryMethod
-                 delivery_method){
+                 delivery_method) throws InterruptedException {
         orderNumber = order_number;
         customerName = customer_name;
+        if (total_amount.intValue() < 0){
+            System.out.println("Invalid total_amount value!!! Please try again with a positive value.");
+            delayExecution(5000);
+            System.exit(0);
+        }
         totalAmount = total_amount;
         deliveryMethod = delivery_method;
         orderStatus = OrderStatus.PLACED;
