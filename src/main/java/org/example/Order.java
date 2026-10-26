@@ -12,6 +12,7 @@ public class Order {
     private PaymentStatus status;
     private DeliveryMethod deliveryMethod;
     private OrderStatus orderStatus;
+    private double deliveryFee;
 
     public Order(String orderNumber, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod) {
         setOrderNumber(orderNumber);
@@ -20,6 +21,12 @@ public class Order {
         setStatus(status);
         setDeliveryMethod(deliveryMethod);
         this.orderStatus = OrderStatus.PLACED;
+
+        this.deliveryFee = switch (getDeliveryMethod()) {
+            case EXPRESS_DELIVERY -> 65.00;
+            case STANDARD_DELIVERY -> 35.00;
+            case COLLECTION -> 0.0;
+        };
 
     }
 
@@ -78,7 +85,7 @@ public class Order {
     }
 
     public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
-        if (status != null) {
+        if (deliveryMethod != null) {
             this.deliveryMethod = deliveryMethod;
         } else {
             throw new IllegalArgumentException(" Delivery method can not be empty");
@@ -95,12 +102,14 @@ public class Order {
             case PLACED:
                 if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
                     return;
                 }
                 break;
             case CONFIRMED:
                 if (targetStatus == OrderStatus.PREPARING || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
                     return;
                 }
                 break;
@@ -108,6 +117,7 @@ public class Order {
                 if (targetStatus == OrderStatus.IN_PROGRESS ||
                         targetStatus == OrderStatus.READY_FOR_COLLECTION || targetStatus == OrderStatus.OUT_FOR_DELIVERY) {
                     this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
                     return;
                 }
                 break;
@@ -116,12 +126,14 @@ public class Order {
             case OUT_FOR_DELIVERY:
                 if (targetStatus == OrderStatus.DELIVERED) {
                     this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
                     return;
                 }
                 break;
             case DELIVERED:
                 if (targetStatus == OrderStatus.RETURNED) {
                     this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
                     return;
                 }
                 break;
@@ -132,11 +144,7 @@ public class Order {
         throw new IllegalStateException("Invalid order move: Cannot change from " + this.orderStatus + " to " + targetStatus);
     }
 
-    double deliveryFee = switch (getDeliveryMethod()) {
-        case EXPRESS_DELIVERY -> 65.00;
-        case STANDARD_DELIVERY -> 35.00;
-        case COLLECTION -> 0.0;
-    };
+
 
     public void orderDetails(){
         if (getStatus() == PENDING) {
@@ -161,6 +169,7 @@ public class Order {
         System.out.printf("Delivery fee is: R%.2f\n", deliveryFee);
         System.out.printf("Grand Total Amount: R%.2f\n", (getTotalAmount() + deliveryFee));
 
+        return;
     }
 
 }

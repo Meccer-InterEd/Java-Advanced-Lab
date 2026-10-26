@@ -14,7 +14,21 @@ public class Main {
 
         Order[] orders = {order, order1, order2};
         for (Order _orders : orders) {
-            _orders.orderDetails();
+            //_orders.orderDetails();
+
+            System.out.println("Current staus: " + _orders.getOrderStatus());
+
+            _orders.nextStatus(CONFIRMED);
+            System.out.println("Updated status: " + _orders.getOrderStatus());
+
+            _orders.nextStatus(PREPARING);
+            System.out.println("Updated status: " + _orders.getOrderStatus());
+
+            System.out.println("Delivery method: " + _orders.getDeliveryMethod());
+            System.out.println();
+
         }
+
+
     }
 }
