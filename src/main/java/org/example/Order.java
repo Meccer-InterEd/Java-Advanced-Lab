@@ -6,18 +6,18 @@ public class Order {
     private String orderNumber;
     private String customerName;
     private BigDecimal totalAmount;
-    private  DeliveryMethod deliveryMethod;
+    private DeliveryMethod deliveryMethod;
     PaymentStatus paymentStatus;
     OrderStatus status;
 
     // added the contructor
-    Order(String customerName, String orderNumber, BigDecimal totalAmount, DeliveryMethod  deliveryMethod){
+    Order(String customerName, String orderNumber, BigDecimal totalAmount, DeliveryMethod deliveryMethod) {
         this.orderNumber = orderNumber;
         this.customerName = customerName;
-         this.totalAmount = totalAmount;
+        this.totalAmount = totalAmount;
         this.deliveryMethod = deliveryMethod;
-        this.paymentStatus = PaymentStatus.PAID;
-        this.status = OrderStatus.CONFIRMED;
+        this.paymentStatus = PaymentStatus.PENDING;
+        this.status = OrderStatus.PLACED;
 
     }
 
@@ -52,27 +52,15 @@ public class Order {
     }
 
 
-// payment status  for payment
-public void setPaymentStatus(PaymentStatus paymentStatus) {
-    if (this.status == OrderStatus.DELIVERED || this.status == OrderStatus.CANCELLED) {
-        System.out.println("Cannot change payment on a closed order.");
+    // payment status  for payment
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        if (status == OrderStatus.DELIVERED || status == OrderStatus.CANCELLED) {
+            System.out.println("Cannot change payment on a closed order.");
+        } else {
+            this.paymentStatus = paymentStatus;
+            System.out.println("Payment status updated to " + paymentStatus);
+        }
     }
-    else if (paymentStatus == null) {
-        System.out.println("Payment status cannot be null.");
-    }
-    else if (this.paymentStatus == PaymentStatus.REFUNDED && paymentStatus != PaymentStatus.REFUNDED) {
-        System.out.println("A refunded payment cannot be reversed.");
-    }
-    else if (this.paymentStatus == PaymentStatus.PAID
-            && paymentStatus != PaymentStatus.PAID
-            && paymentStatus != PaymentStatus.REFUNDED) {
-        System.out.println("A paid payment cannot be changed to failed or pending.");
-    }
-    else {
-        this.paymentStatus = paymentStatus;
-        System.out.println("Payment status updated to " + paymentStatus);
-    }
-}
 
     // added the  free delivary and after the collection
     public BigDecimal calculateFreeDelivery() {
@@ -84,8 +72,16 @@ public void setPaymentStatus(PaymentStatus paymentStatus) {
             return new BigDecimal("65.00");
         } else {
             return BigDecimal.ZERO;
-        }}
-
+        }
+    }
+    public void displayPaymentStatus() {
+        switch (paymentStatus) {
+            case PENDING -> System.out.println("Payment is pending.");
+            case PAID -> System.out.println("Payment successful.");
+            case FAILED -> System.out.println("Payment was unsuccessful.");
+            case REFUNDED -> System.out.println("Payment has been refunded.");
+        }
+    }
 
     // add confirmation for order
     public void confirmingOrder() {
@@ -93,18 +89,17 @@ public void setPaymentStatus(PaymentStatus paymentStatus) {
             System.out.println("Order cannot be confirmed when payment is not successful.");
         } else if (status != OrderStatus.PLACED) {
             System.out.println(" Placed order can be confirmed.");
-        }
-        else {
+        } else {
             status = OrderStatus.CONFIRMED;
             System.out.println("Order confirmed successfully.");
         }
     }
 
 
-
-    public BigDecimal calculateTotalAmount(){
-    return totalAmount.add(calculateFreeDelivery());
+    public BigDecimal calculateTotalAmount() {
+        return totalAmount.add(calculateFreeDelivery());
     }
+
     public void displayOrderSummary() {
         System.out.println("===== ORDER SUMMARY =====");
         System.out.println("Order Number: " + orderNumber);
@@ -117,6 +112,47 @@ public void setPaymentStatus(PaymentStatus paymentStatus) {
         System.out.println("Grand Total: R" + calculateTotalAmount());
         System.out.println("=========================");
     }
+
+    public void nextStatus() {
+        if (status == null || paymentStatus == null) {
+            System.out.println("ERROR: Missing status.");
+            return;
+        }
+        switch (status) {
+            case PLACED -> {
+                if (paymentStatus != PaymentStatus.PAID) {
+                    System.out.println("ERROR: Payment required.");
+                    return;
+                }
+                status = OrderStatus.CONFIRMED;
+            }
+            case CONFIRMED -> status = OrderStatus.PREPARING;
+            case PREPARING -> status = OrderStatus.OUT_FOR_DELIVERY;
+            case OUT_FOR_DELIVERY -> status = OrderStatus.DELIVERED;
+            case DELIVERED, CANCELLED -> {
+                System.out.println("Order cannot continue.");
+                return;
+            }
+        }
+        System.out.println("New status: " + status);
+    }
+
+    public void cancelOrder() {
+        if (status == null) {
+            System.out.println("Cannot cancel because order status is missing.");
+        } else if (status == OrderStatus.DELIVERED) {
+            System.out.println("A delivered order cannot be cancelled.");
+        } else if (status == OrderStatus.CANCELLED) {
+            System.out.println(": This order is already cancelled.");
+        } else if (status == OrderStatus.OUT_FOR_DELIVERY) {
+            System.out.println(" Cannot cancel an order that is out for delivery.");
+        } else {
+            status = OrderStatus.CANCELLED;
+            System.out.println("Order cancelled successfully.");
+        }
+    }
+
+
 }
 
 
