@@ -1,0 +1,7 @@
+package lab.enums;
+
+public enum DeliveryMethod {
+
+    COLLECTION, STANDARD_DELIVERY, EXPRESS_DELIVERY
+
+}
