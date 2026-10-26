@@ -37,7 +37,8 @@ Create these enums:
 - `PaymentStatus`: `PENDING`, `PAID`, `FAILED`, `REFUNDED`
 - `DeliveryMethod`: `COLLECTION`, `STANDARD_DELIVERY`, `EXPRESS_DELIVERY`
 
-Create an `Order` class containing an order number, customer name, total amount, status, payment status, and delivery method.
+**Create an `Order` class containing an order number, customer name, 
+total amount, status, payment status, and delivery method.**
 
 Implement methods to:
 
