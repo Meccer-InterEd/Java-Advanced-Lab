@@ -1,4 +1,7 @@
 package org.example;
 
-public class DeliveryMethod {
+public enum DeliveryMethod {
+    COLLECTION,
+    STANDARD_DELIVERY,
+    EXPRESS_DELIVERY
 }
