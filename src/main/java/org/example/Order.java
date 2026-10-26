@@ -16,9 +16,8 @@ public class Order {
         this.customerName = customerName;
          this.totalAmount = totalAmount;
         this.deliveryMethod = deliveryMethod;
-        this.paymentStatus = PaymentStatus.PENDING;
-        this.status = OrderStatus.PLACED;
-
+        this.paymentStatus = PaymentStatus.PAID;
+        this.status = OrderStatus.CONFIRMED;
 
     }
 
@@ -55,9 +54,21 @@ public class Order {
 
 // payment status  for payment
 public void setPaymentStatus(PaymentStatus paymentStatus) {
-    if (paymentStatus == null) {
+    if (this.status == OrderStatus.DELIVERED || this.status == OrderStatus.CANCELLED) {
+        System.out.println("Cannot change payment on a closed order.");
+    }
+    else if (paymentStatus == null) {
         System.out.println("Payment status cannot be null.");
-    } else {
+    }
+    else if (this.paymentStatus == PaymentStatus.REFUNDED && paymentStatus != PaymentStatus.REFUNDED) {
+        System.out.println("A refunded payment cannot be reversed.");
+    }
+    else if (this.paymentStatus == PaymentStatus.PAID
+            && paymentStatus != PaymentStatus.PAID
+            && paymentStatus != PaymentStatus.REFUNDED) {
+        System.out.println("A paid payment cannot be changed to failed or pending.");
+    }
+    else {
         this.paymentStatus = paymentStatus;
         System.out.println("Payment status updated to " + paymentStatus);
     }
