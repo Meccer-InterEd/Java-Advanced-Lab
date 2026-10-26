@@ -29,7 +29,7 @@ public class Order {
         if (amount.compareTo(totalAmount) >= 0){
             toPaymentStatusPaid("\nPayment successful!!");
             toOrderStatusConfirmed("\nOrder has been confirmed",orderNumber);
-            delayExecution(10000);
+            delayExecution(5000);
             toOrderStatusPreparing("\nOrder is being prepared",orderNumber);
         } else {
             toPaymentStatusFailed("\nPayment failed due to insufficient funds!!!");
