@@ -32,43 +32,75 @@ public class Order {
     public void Pay(BigDecimal amount) throws InterruptedException {
         totalAmount = totalAmount.add(deliveryMethod.getDeliveryFee());
         if (amount.compareTo(totalAmount) >= 0){
-            toPaymentStatusPaid("\nPayment successful!!");
-            toOrderStatusConfirmed("\nOrder has been confirmed",orderNumber);
+            paymentPaid("\nPayment successful!!");
+            orderConfirmed("\nOrder has been confirmed",orderNumber);
             delayExecution(5000);
-            toOrderStatusPreparing("\nOrder is being prepared",orderNumber);
+            orderPreparing("\nOrder is being prepared",orderNumber);
+            orderProgress();
         } else {
-            toPaymentStatusFailed("\nPayment failed due to insufficient funds!!!");
-            toOrderStatusCancelled("\nOrder has been cancelled due to non-payment",orderNumber);
+            paymentFailed("\nPayment failed due to insufficient funds!!!");
+            orderCancelled("\nOrder has been cancelled due to non-payment",orderNumber);
         }
-
     }
 
-    private void toPaymentStatusPaid(String message){
+    private void paymentPaid(String message){
         paymentStatus = PaymentStatus.PAID;
         System.out.println(message);
     }
 
-    private void toPaymentStatusFailed(String message){
+    private void paymentFailed(String message){
         paymentStatus = PaymentStatus.FAILED;
         System.out.println(message);
     }
 
-    private void toOrderStatusConfirmed(String message, String orderNum){
+    private void orderConfirmed(String message, String orderNum){
         orderStatus = OrderStatus.CONFIRMED;
         System.out.println(message+" : Alert for order number "+orderNum);
     }
 
-    private void toOrderStatusPreparing(String message, String orderNum){
+    private void orderPreparing(String message, String orderNum){
         orderStatus = OrderStatus.PREPARING;
         System.out.println(message+" : Alert for order number "+orderNum);
     }
 
-    private void toOrderStatusCancelled(String message, String orderNum){
+    private void orderCancelled(String message, String orderNum){
         orderStatus = OrderStatus.CANCELLED;
         System.out.println(message+" : Alert for order number "+orderNum);
     }
 
+    private void orderReadyForCollection(String message, String orderNum){
+        orderStatus = OrderStatus.READY_FOR_COLLECTION;
+        System.out.println(message+" : Alert for order number "+orderNum+"\n\n");
+    }
+
+    private void orderOutForDelivery(String message, String orderNum){
+        orderStatus = OrderStatus.OUT_FOR_DELIVERY;
+        System.out.println(message+" : Alert for order number "+orderNum);
+    }
+
+    private void orderDelivered(String message, String orderNum){
+        orderStatus = OrderStatus.DELIVERED;
+        System.out.println(message+" : Alert for order number "+orderNum+"\n\n");
+    }
+
     private void delayExecution(int milliseconds) throws InterruptedException {
         Thread.sleep(milliseconds);
+    }
+
+    private void orderProgress() throws InterruptedException {
+        if (deliveryMethod == DeliveryMethod.COLLECTION){
+            delayExecution(7000);
+            orderReadyForCollection("\nThe order is ready for collection",orderNumber);
+        } else if (deliveryMethod == DeliveryMethod.STANDARD_DELIVERY){
+            delayExecution(7000);
+            orderOutForDelivery("\nThe order is out for delivery",orderNumber);
+            delayExecution(7000);
+            orderDelivered("\nOrder delivered",orderNumber);
+        } else {
+            delayExecution(5000);
+            orderOutForDelivery("\nThe order is out for delivery",orderNumber);
+            delayExecution(4000);
+            orderDelivered("\nOrder delivered",orderNumber);
+        }
     }
 }
