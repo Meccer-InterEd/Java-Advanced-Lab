@@ -11,33 +11,40 @@ public class Order {
     OrderStatus status;
 
     // added the contructor
-    Order(String orderName, String orderNumber,String customerName){
+    Order(String customerName, String orderNumber, BigDecimal totalAmount, DeliveryMethod  deliveryMethod){
         this.orderNumber = orderNumber;
         this.customerName = customerName;
-        BigDecimal totalAmount;
-        DeliveryMethod deliveryMethod;
+         this.totalAmount = totalAmount;
+        this.deliveryMethod = deliveryMethod;
         this.paymentStatus = PaymentStatus.PENDING;
         this.status = OrderStatus.PLACED;
 
+
     }
 
+
     public String getOrderNumber() {
+
         return orderNumber;
     }
 
     public String getCustomerName() {
+
         return customerName;
     }
 
     public BigDecimal getTotalAmount() {
+
         return totalAmount;
     }
 
     public DeliveryMethod getDeliveryMethod() {
+
         return deliveryMethod;
     }
 
     public PaymentStatus getPaymentStatus() {
+
         return paymentStatus;
     }
 
@@ -45,27 +52,17 @@ public class Order {
         return status;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
 
-        this.totalAmount = totalAmount;
-    }
 // payment status  for payment
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        if (this.status == OrderStatus.DELIVERED || this.status == OrderStatus.CANCELLED) {
-            System.out.println("Cannot change payment on a closed order.");
-        } else if (paymentStatus == null) {
-            System.out.println("Payment status cannot be null.");
-        } else if (this.paymentStatus == PaymentStatus.REFUNDED && paymentStatus != PaymentStatus.REFUNDED) {
-            System.out.println("A refunded payment cannot be reversed.");
-        } else if (this.paymentStatus == PaymentStatus.PAID
-                && paymentStatus != PaymentStatus.PAID
-                && paymentStatus != PaymentStatus.REFUNDED) {
-            System.out.println("A paid payment cannot be changed to failed or pending.");
-        } else {
-            this.paymentStatus = paymentStatus;
-            System.out.println("Payment status updated to " + paymentStatus);
-        }
+public void setPaymentStatus(PaymentStatus paymentStatus) {
+    if (paymentStatus == null) {
+        System.out.println("Payment status cannot be null.");
+    } else {
+        this.paymentStatus = paymentStatus;
+        System.out.println("Payment status updated to " + paymentStatus);
     }
+}
+
     // added the  free delivary and after the collection
     public BigDecimal calculateFreeDelivery() {
         if (deliveryMethod == DeliveryMethod.COLLECTION) {
@@ -94,10 +91,21 @@ public class Order {
 
 
 
-    public BigDecimal calculateTotalAmount() {
-        return totalAmount.add(calculateFreeDelivery());
+    public BigDecimal calculateTotalAmount(){
+    return totalAmount.add(calculateFreeDelivery());
     }
-
+    public void displayOrderSummary() {
+        System.out.println("===== ORDER SUMMARY =====");
+        System.out.println("Order Number: " + orderNumber);
+        System.out.println("Customer: " + customerName);
+        System.out.println("Order Status: " + status);
+        System.out.println("Payment Status: " + paymentStatus);
+        System.out.println("Delivery Method: " + deliveryMethod);
+        System.out.println("Order Total: R" + totalAmount.toPlainString());
+        System.out.println("Delivery Fee: R" + calculateFreeDelivery());
+        System.out.println("Grand Total: R" + calculateTotalAmount());
+        System.out.println("=========================");
+    }
 }
 
 
