@@ -10,6 +10,6 @@ public class Main {
                     new BigDecimal("249.99"),
                     DeliveryMethod.STANDARD_DELIVERY
             );
-            order.Pay(new BigDecimal("300.00"));
+            order.Pay(new BigDecimal("600.00"));
         }
     }

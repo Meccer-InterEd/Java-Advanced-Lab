@@ -25,16 +25,45 @@ public class Order {
     }
 
     public void Pay(BigDecimal amount) throws InterruptedException {
-//        totalAmount = totalAmount.add(deliveryMethod.getDeliveryFee());
+        totalAmount = totalAmount.add(deliveryMethod.getDeliveryFee());
         if (amount.compareTo(totalAmount) >= 0){
-            System.out.println("\nPayment successful!!");
-            orderStatus = OrderStatus.CONFIRMED;
-            System.out.println("\nOrder "+orderNumber+" has been confirmed!!!");
-            Thread.sleep(10000);
-//            orderStatus = OrderStatus.PREPARING;
-//            System.out.println("\nOrder "+orderNumber+" is getting prepared!!!");
+            toPaymentStatusPaid("\nPayment successful!!");
+            toOrderStatusConfirmed("\nOrder has been confirmed",orderNumber);
+            delayExecution(10000);
+            toOrderStatusPreparing("\nOrder is being prepared",orderNumber);
         } else {
-            System.out.println("\nPayment failed due to insufficient funds!!! Order costs R"+totalAmount);
+            toPaymentStatusFailed("\nPayment failed due to insufficient funds!!!");
+            toOrderStatusCancelled("\nOrder has been cancelled due to non-payment",orderNumber);
         }
+
+    }
+
+    private void toPaymentStatusPaid(String message){
+        paymentStatus = PaymentStatus.PAID;
+        System.out.println(message);
+    }
+
+    private void toPaymentStatusFailed(String message){
+        paymentStatus = PaymentStatus.FAILED;
+        System.out.println(message);
+    }
+
+    private void toOrderStatusConfirmed(String message, String orderNum){
+        orderStatus = OrderStatus.CONFIRMED;
+        System.out.println(message+" : Alert for order number "+orderNum);
+    }
+
+    private void toOrderStatusPreparing(String message, String orderNum){
+        orderStatus = OrderStatus.PREPARING;
+        System.out.println(message+" : Alert for order number "+orderNum);
+    }
+
+    private void toOrderStatusCancelled(String message, String orderNum){
+        orderStatus = OrderStatus.CANCELLED;
+        System.out.println(message+" : Alert for order number "+orderNum);
+    }
+
+    private void delayExecution(int milliseconds) throws InterruptedException {
+        Thread.sleep(milliseconds);
     }
 }
