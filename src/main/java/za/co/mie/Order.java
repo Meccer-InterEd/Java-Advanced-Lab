@@ -21,34 +21,26 @@ public class Order {
         this.delivery_method = delivery_method;
     }
 
-    public OrderStatus status() {
-        return status;
-    }
-
-    public PaymentStatus payment_status() {
-        return payment_status;
-    }
-
     public void mark_paid() {
-        ensure_open();
+        check_open();
         payment_status = PaymentStatus.PAID;
     }
 
-    public void mark_payment_failed() {
-        ensure_open();
-        payment_status = PaymentStatus.FAILED;
-    }
-
     public void confirm() {
-        ensure_open();
+        check_open();
         if (status != OrderStatus.PLACED) throw new IllegalStateException("Order already " + status);
         if (payment_status != PaymentStatus.PAID) throw new IllegalStateException("Payment is " + payment_status + ", cannot confirm");
         status = OrderStatus.CONFIRMED;
     }
 
     public OrderStatus next_status() {
-        ensure_open();
-        return status.next(delivery_method);
+        check_open();
+        return switch (status) {
+            case PLACED -> OrderStatus.CONFIRMED;
+            case CONFIRMED -> OrderStatus.PREPARING;
+            case PREPARING -> delivery_method == DeliveryMethod.COLLECTION ? OrderStatus.READY_FOR_COLLECTION : OrderStatus.OUT_FOR_DELIVERY;
+            default -> OrderStatus.DELIVERED;
+        };
     }
 
     public void advance() {
@@ -56,9 +48,13 @@ public class Order {
         else status = next_status();
     }
 
+    public void advance(int steps) {
+        for (int i = 0; i < steps; i++) advance();
+    }
+
     public void cancel() {
-        ensure_open();
-        if (!status.can_cancel()) throw new IllegalStateException("Order is " + status + ", cannot cancel");
+        check_open();
+        if (status == OrderStatus.OUT_FOR_DELIVERY) throw new IllegalStateException("Order already dispatched, cannot cancel");
         status = OrderStatus.CANCELLED;
         payment_status = payment_status == PaymentStatus.PAID ? PaymentStatus.REFUNDED : payment_status;
     }
@@ -75,11 +71,11 @@ public class Order {
         return total.add(delivery_fee());
     }
 
-    public String summary() {
-        return order_number + " | " + customer_name + " | " + status + " | " + payment_status + " | " + delivery_method + " | total R" + total + " + fee R" + delivery_fee() + " = R" + grand_total();
+    public void display_results() {
+        System.out.println("Order " + order_number + " | " + customer_name + " | " + status + " | payment " + payment_status + " | " + delivery_method + " | total R" + total + " + fee R" + delivery_fee() + " = R" + grand_total());
     }
 
-    private void ensure_open() {
-        if (status.is_final()) throw new IllegalStateException("Order is " + status + " and cannot be changed");
+    private void check_open() {
+        if (status == OrderStatus.DELIVERED || status == OrderStatus.CANCELLED) throw new IllegalStateException("Order is " + status + " and cannot be changed");
     }
 }
