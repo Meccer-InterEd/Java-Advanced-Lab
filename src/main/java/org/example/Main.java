@@ -13,5 +13,14 @@ public class Main {
                 6373,
                 DeliveryMethod.STANDARD_DELIVERY
         );
+        order.setPaymentStatus(PaymentStatus.PAID);
+        order.nextStatus();
+        order.nextStatus();
+        Order order1=new Order(111,"Lona",2000,DeliveryMethod.COLLECTION);
+        Order order2=new Order(222,"Siya",5000,DeliveryMethod.COLLECTION);
+        order.displayDetails();
+
+        order1.displayDetails();
+        order2.displayDetails();
         }
     }
