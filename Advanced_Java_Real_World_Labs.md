@@ -21,34 +21,7 @@ By the end of these labs, you should be able to:
 - Combine the concepts into a small application with realistic workflows.
 
 ## General rules
-
-1. Use meaningful names and keep each public class in its own `.java` file.
-2. Use private fields and validate data at object boundaries.
-3. Do not use `null` to represent an ordinary business state when an enum or `Optional` is clearer.
-4. Prefer composition over inheritance unless there is a genuine “is-a” relationship.
-5. Use `BigDecimal` for money rather than `double`.
-6. Add tests for normal, boundary, and invalid cases.
-7. Do not use external libraries unless a lab explicitly asks you to extend the project.
-
-## Suggested project structure
-
-```text
-java-advanced-labs/
-└── src/
-    ├── main/java/za/co/learning/
-    │   ├── enums/
-    │   ├── interfaces/
-    │   ├── records/
-    │   ├── annotations/
-    │   ├── model/
-    │   ├── service/
-    │   └── Main.java
-    └── test/java/za/co/learning/
-```
-
-You can also create a separate folder for each lab if you are still learning how packages work.
-
----
+do good
 
 # Lab 1 — Enum-powered Food Delivery Order
 
