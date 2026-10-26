@@ -1,11 +1,11 @@
 package org.example;
 
-
-import jdk.swing.interop.SwingInterOpUtils;
-
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Do good and be productive!!");
-        System.out.println("Hhhh");
-        }
+
+        Order order = new Order("111", "Syd", 240, OrderStatus.PLACED, PaymentStatus.PENDING, DeliveryMethod.COLLECTION);
+
+        order.display();
+
     }
+}
