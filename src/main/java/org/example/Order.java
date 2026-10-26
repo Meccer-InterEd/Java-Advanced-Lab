@@ -46,20 +46,9 @@ public class Order {
 
 //    void paymentStatuses
     
-    void orderStatuses(){
-        if (paymentStatus == PaymentStatus.PENDING){
-            orderStatus = OrderStatus.PLACED;
-            System.out.println("Your Order is placed, Please proceed to payment to confirm Order");
-        }else if (paymentStatus == PaymentStatus.FAILED){
-            orderStatus = OrderStatus.CANCELLED;
-            System.out.println("Your Order has been called to payment failer");
-        } else if (paymentStatus == PaymentStatus.REFUNDED) {
-            orderStatus = OrderStatus.CANCELLED;
-            System.out.println("Your Order has been called due to a refund");
-        }
-    }
 
-//    statement ? lokhu : else
+
+
 
 
     //void switch_status(){
