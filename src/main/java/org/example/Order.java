@@ -10,6 +10,7 @@ public class Order {
     PaymentStatus paymentStatus;
     OrderStatus status;
 
+    // added the contructor
     Order(String orderName, String orderNumber,String customerName){
         this.orderNumber = orderNumber;
         this.customerName = customerName;
