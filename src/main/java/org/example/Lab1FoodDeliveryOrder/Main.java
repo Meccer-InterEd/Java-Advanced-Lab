@@ -2,13 +2,23 @@ package org.example.Lab1FoodDeliveryOrder;
 
 import java.math.BigDecimal;
 
-import static org.example.Lab1FoodDeliveryOrder.DeliveryMethod.COLLECTION;
 
 public class Main {
     public static void main(String[] args){
-        Order o1 = new Order("1","mo",new BigDecimal(788),COLLECTION);
+      Order order = new Order("ORD-1001", "Thabang", new BigDecimal(250.00), DeliveryMethod.STANDARD_DELIVERY);
+         order.display();
+          order.confirmPayment(new BigDecimal("300.00"));
+          order.nextStatus();
+          order.nextStatus();
+          order.nextStatus();
+         
+          System.out.println("\n Final State");
+          order.display();
 
-        o1.display();
+    Order order2 = new Order("ORD-1002","Keitu",new BigDecimal("150.00"),DeliveryMethod.COLLECTION);
+        order2.display();
+        order2.confirmPayment(new BigDecimal("100.00"));
+        order2.nextStatus();
 
     }
 }

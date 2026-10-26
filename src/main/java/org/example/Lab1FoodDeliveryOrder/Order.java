@@ -9,123 +9,76 @@ public class Order {
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
     private DeliveryMethod deliveryMethod;
-    OrderStatus stat;
 
 
 
     public Order(String orderNum, String custName, BigDecimal totalAmount, DeliveryMethod deliveryMethod){
 
-        if (totalAmount.doubleValue() <= 0)
+        if (totalAmount == null || totalAmount.compareTo(BigDecimal.ZERO) <0)
         {
-            throw new IllegalArgumentException("Enter a valid Amount");
+            throw new IllegalArgumentException("Enter a valid Amount, Order total cannot be negative");
         }
 
         this.orderNum = orderNum;
         this.custName = custName;
-
+        this.totalAmount = totalAmount;
         this.deliveryMethod = deliveryMethod;
+
         this.orderStatus = OrderStatus.PLACED;
         this.paymentStatus = PaymentStatus.PENDING;
-
-        this.totalAmount = totalAmount.add(deliveryMethod.determineDeliveryFee(deliveryMethod))  ;
+        
     }
 
-    Order(){
+    
+    public String getCustName() {return custName;}
 
-    }
+    public void setCustName(String custName) {this.custName = custName;}
 
+    public String getOrderNum() { return orderNum;}
 
+    public void setOrderNum(String orderNum) { this.orderNum = orderNum;}
 
-    public String getCustName() {
-        return custName;
-    }
+    public BigDecimal getTotalAmount() {return totalAmount;}
 
-    public void setCustName(String custName) {
-        this.custName = custName;
-    }
+    public void setTotalAmount(BigDecimal totalAmount) {this.totalAmount = totalAmount;}
 
-    public String getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(String orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public DeliveryMethod getDeliveryMethod() {
-        return deliveryMethod;
-    }
+    public DeliveryMethod getDeliveryMethod() {return deliveryMethod;}
 
     public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
 
-        if( ! ( orderStatus == OrderStatus.PLACED || orderStatus == OrderStatus.CONFIRMED || orderStatus == OrderStatus.PREPARING )) {
+        if( ! ( this.orderStatus == OrderStatus.PLACED || this.orderStatus == OrderStatus.CONFIRMED || this.orderStatus == OrderStatus.PREPARING )) {
 
-            throw new IllegalArgumentException("Delivery cant be changed");
+            throw new IllegalArgumentException("Delivery cannot be changed at this stage");
         }
-
-
-
         this.deliveryMethod = deliveryMethod;
-
-
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public OrderStatus getOrderStatus() {return orderStatus;}
+
+    public void setOrderStatus(OrderStatus orderStatus) { this.orderStatus = orderStatus;}
+
+    public PaymentStatus getPaymentStatus() {return paymentStatus;}
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {this.paymentStatus = paymentStatus;}
+
+
+    public BigDecimal determineDeliveryFee(){
+        switch(deliveryMethod){
+            case COLLECTION -> {
+                 return new BigDecimal(0);
+            }
+            case STANDARD_DELIVERY ->{
+                return new BigDecimal("35.00");
+            }
+            default ->{
+                return new BigDecimal("65.00");
+            }
+        
+        }
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-
-        if( !( this.orderStatus == OrderStatus.PLACED || this.orderStatus == OrderStatus.CONFIRMED || this.orderStatus == OrderStatus.PREPARING) )
-        {
-
-           throw  new IllegalArgumentException("An order cant be changed");
-        }
-        else if(orderStatus == OrderStatus.PLACED)
-        {
-            setPaymentStatus(PaymentStatus.PENDING);
-        }
-        else if( orderStatus == OrderStatus.CANCELLED)
-        {
-            setPaymentStatus(PaymentStatus.REFUNDED);
-        }
-        else
-        {
-            setPaymentStatus(PaymentStatus.PAID);
-        }
-
-        this.orderStatus = orderStatus;
-
-
-    }
-
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-         if(paymentStatus == PaymentStatus.PENDING)
-         {
-             setOrderStatus(OrderStatus.PLACED);
-         }
-         else if(paymentStatus == PaymentStatus.PAID)
-         {
-             setOrderStatus(OrderStatus.CONFIRMED);
-
-         }
-         else {
-             setOrderStatus(OrderStatus.CANCELLED);
-         }
-
-        this.paymentStatus = paymentStatus;
+    public BigDecimal overallTotal(){
+        return totalAmount.add(determineDeliveryFee());
     }
 
 
@@ -133,25 +86,80 @@ public class Order {
 
 
     public void confirmPayment(BigDecimal amount){
-        totalAmount = totalAmount.add(deliveryMethod.determineDeliveryFee(deliveryMethod));
-        if(amount.compareTo(totalAmount) >=0 ){
-            paymentStatus = PaymentStatus.PAID;
+        BigDecimal grandTotal = overallTotal();
+
+        if(amount.compareTo(grandTotal) >=0 ){
+            this.paymentStatus = PaymentStatus.PAID;
+            this.orderStatus = OrderStatus.CONFIRMED;
             System.out.println("Payment is successful");
-            orderStatus = OrderStatus.CONFIRMED;
             System.out.println("Order: " + orderNum + " is confirmed");
         }
         else {
-            orderStatus = OrderStatus.PLACED;
-            paymentStatus = PaymentStatus.FAILED;
-            System.out.println("Payment has failed due to insufficient funds:  Required Amount R"+ totalAmount);
+           this.orderStatus = OrderStatus.PLACED;
+            this.paymentStatus = PaymentStatus.FAILED;
+            System.out.println("Payment has failed due to insufficient funds:  Required Amount R"+ grandTotal);
         }
+    }
+
+    public void cancelOrder(){
+        if(this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED ){
+           throw new IllegalArgumentException("Cannot change an order that is already " + this.orderStatus); 
+        }
+
+        if(this.orderStatus == OrderStatus.OUT_FOR_DELIVERY){
+            throw new IllegalArgumentException("Cannot cancel order. It is already out for delivery!");
+        }
+
+        this.orderStatus = OrderStatus.CANCELLED;
+        this.paymentStatus = PaymentStatus.REFUNDED;
+        System.out.println("Order " + this.orderNum + " has been successfully cancelled.");
     }
 
 
 
-    void display()
+    public void display()
     {
-        System.out.println(orderStatus + " " + orderNum + " " + paymentStatus + " " + deliveryMethod  + " " + totalAmount);
+        System.out.println("..ORDER SUMMARY..");
+        System.out.println("Order Number:" + this.orderNum + "\nCustomer Name:" + this.custName);
+        System.out.println("Order Status:" + this.orderStatus +"\nPayment Status:" + this.paymentStatus + "\nDelivery Method:" + this.deliveryMethod);
+        System.out.println("Amount of Items :R" + this.totalAmount +"\nDelivery Fee :R" + this.determineDeliveryFee()+ "\nTotal due with deliveryFee :R"+ overallTotal());
+    }
+
+    public void nextStatus(){
+        if(this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED){
+            throw new IllegalArgumentException("Cannot advance status. Order is already " + this.orderStatus);
+        }
+
+        switch (this.orderStatus){
+            case PLACED:
+                if(this.paymentStatus != PaymentStatus.PAID){
+                    throw new IllegalArgumentException("Payment still pending, cannot confirm order");
+                }
+                this.orderStatus = OrderStatus.CONFIRMED;
+                break;
+
+            case CONFIRMED:
+                this.orderStatus = OrderStatus.PREPARING;
+                break;
+            
+            case PREPARING:
+                if(this.deliveryMethod == DeliveryMethod.COLLECTION){
+                    this.orderStatus = OrderStatus.READY_FOR_COLLECTION;
+                }else{
+                    this.orderStatus = OrderStatus.OUT_FOR_DELIVERY;
+                }
+                break;
+
+            case READY_FOR_COLLECTION:
+            case OUT_FOR_DELIVERY:
+                this.orderStatus = OrderStatus.DELIVERED;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid current status ");
+        }
+
+        System.out.println("Order " + this.orderNum + "  moved to next status: " + this.orderStatus);
     }
 
 
