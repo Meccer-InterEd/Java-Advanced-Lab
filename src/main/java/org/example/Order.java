@@ -6,6 +6,7 @@ public class Order {
     private double totalAmount;
     private PaymentStatus status;
     private DeliveryMethod deliveryMethod;
+    private OrderStatus orderStatus;
 
     public Order(String order_Number, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod) {
         setOrder_Number(order_Number);
@@ -13,6 +14,7 @@ public class Order {
         setTotalAmount(totalAmount);
         setStatus(status);
         setDeliveryMethod(deliveryMethod);
+        this.orderStatus = OrderStatus.PLACED;
     }
 
     public String getOrder_Number() {
@@ -73,5 +75,51 @@ public class Order {
         } else {
             throw new IllegalArgumentException("Delivery method cannot be empty");
         }
+    }
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void nextStatus(OrderStatus targetStatus) {
+        switch (this.orderStatus) {
+            case PLACED:
+                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
+            case CONFIRMED:
+                if (targetStatus == OrderStatus.PREPARING || targetStatus == OrderStatus.CANCELLED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
+            case PREPARING:
+                if (targetStatus == OrderStatus.IN_PROGRESS ||
+                        targetStatus == OrderStatus.READY_FOR_COLLECTION ||
+                        targetStatus == OrderStatus.OUT_FOR_DELIVERY) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
+            case IN_PROGRESS:
+            case READY_FOR_COLLECTION:
+            case OUT_FOR_DELIVERY:
+                if (targetStatus == OrderStatus.DELIVERED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
+            case DELIVERED:
+                if (targetStatus == OrderStatus.RETURNED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
+            case CANCELLED:
+            case RETURNED:
+                break;
+        }
+        throw new IllegalStateException("Invalid order move: Cannot change from " + this.orderStatus + " to " + targetStatus);
     }
 }
