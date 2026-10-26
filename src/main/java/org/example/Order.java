@@ -51,20 +51,23 @@ public class Order {
             System.out.println("Order is already out for delivery, CAN NOT CANCEL AT THIS STAGE.");
         }
     }
+
     public void totalCost() {
-        if(deliveryMethod == DeliveryMethod.COLLECTION) {
-            totalAmount = totalAmount.add(new BigDecimal("0"));
-        }  else if(deliveryMethod == DeliveryMethod.STANDARD_DELIVERY) {
-            totalAmount = totalAmount.add(new BigDecimal("35"));
-        }else{
-            totalAmount = totalAmount.add(new BigDecimal("65"));
+        switch (deliveryMethod) {
+            case COLLECTION ->  totalAmount = totalAmount.add(totalAmount.add(new BigDecimal("0")));
+            case STANDARD_DELIVERY ->   totalAmount = totalAmount.add(totalAmount.add(new BigDecimal("35")));
+            case EXPRESS_DELIVERY ->    totalAmount = totalAmount.add(totalAmount.add(new BigDecimal("65")));
         }
-        System.out.println("Total Cost with delivery fee: " + "R" + totalAmount);
+        System.out.println("Total Cost with Delivery fee: " + "R" + totalAmount);
     }
 
     public void info() {
         System.out.println("Order Number: " + orderNumber);
         System.out.println("Customer Name: " + customerName);
-        System.out.println("Total Amount: " + totalAmount);
+        System.out.println("Total Amount: " + "R" + totalAmount);
+    }
+
+    public void nextStatus(){
+
     }
 }
