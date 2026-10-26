@@ -7,7 +7,7 @@ public class Order {
  private    String customerName;
   private BigDecimal totalAmount;
   private   OrderStatus status;
-  private   PaymentStatus paymentStaus;
+  private   PaymentStatus paymentStatus;
   private   DeliveryMethod deliveryMethod;
 
 
@@ -17,35 +17,74 @@ public class Order {
         this.totalAmount = totalAmount;
         this.deliveryMethod = deliveryMethod;
         status = OrderStatus.PLACED;
-        paymentStaus = PaymentStatus.PENDING;
+        paymentStatus = PaymentStatus.PENDING;
+
+        if (totalAmount.compareTo(BigDecimal.ZERO) < 0){
+            System.out.println("The total order amount cannot be negative");
+        }
+
+    }
+    public void setPaymentStatus(PaymentStatus paymentStaus){
+
+        this.paymentStatus = paymentStaus;
     }
 
-    public  void Payment(BigDecimal amount){
-        totalAmount = totalAmount.add(deliveryMethod.getDeliveryFee());
-        if (amount.compareTo(totalAmount) >= 0){
-            paymentStaus = PaymentStatus.PAID;
-            System.out.println("\nPayment Successful for order "+orderNumber);
+public void confirmOrder(){
+        if (paymentStatus == PaymentStatus.PAID){
             status = OrderStatus.CONFIRMED;
-            System.out.println("\nOrder "+orderNumber+" confirmed");
-            status = OrderStatus.PREPARING;
-            System.out.println("\nOrder "+orderNumber+" is preparing");
-            if (deliveryMethod == DeliveryMethod.COLLECTION){
-                status = OrderStatus.READY_FOR_COLLECTION;
-                System.out.println("\nYour order "+orderNumber+" is ready for collection");
-            }
-            else {
-                status = OrderStatus.OUT_FOR_DELIVERY;
-                System.out.println("\nYour order "+orderNumber+" is out for delivery!");
-                status = OrderStatus.DELIVERED;
-            }
+            System.out.println("Your order is confirmed.");
         }
         else {
-            paymentStaus = PaymentStatus.FAILED;
-            System.out.println("\npayment failed for order "+orderNumber);
-            status = OrderStatus.CANCELLED;
-            System.out.println(status);
+            System.out.println("Order cannot be confirmed until order payment succeeds.");
         }
-    }
+}
+public void nextStatus(){
+        switch(status){
+            case CONFIRMED ->
+                status = OrderStatus.PREPARING;
+            case PREPARING ->
+                status = OrderStatus.READY_FOR_COLLECTION;
+            case READY_FOR_COLLECTION ->
+                status = OrderStatus.OUT_FOR_DELIVERY;
+            case OUT_FOR_DELIVERY ->
+                status = OrderStatus.DELIVERED;
+            default -> System.out.println("Invalid status transition from" + status);
 
+
+        }
+}
+public void cancelOrder(){
+        if (status == OrderStatus.OUT_FOR_DELIVERY){
+            System.out.println("Order cannot be cancelled once it is out for delivery");
+        }
+        if (status == OrderStatus.CANCELLED){
+            System.out.println("order cancelled");
+        }
+}
+public BigDecimal calcDeliveryFee(){
+        return switch (deliveryMethod){
+            case COLLECTION -> BigDecimal.ZERO;
+            case STANDARD_DELIVERY -> new BigDecimal(35);
+            case EXPRESS_DELIVERY ->  new BigDecimal(65);
+
+        };
 
 }
+public BigDecimal calcGrandTotal(){
+        return
+                totalAmount.add(calcDeliveryFee());
+}
+public void Summary(){
+    System.out.println("Order Number:" + orderNumber + " Customer:" + customerName + " Status:" + status + " Payment status:" + paymentStatus + " Delivery method:" + deliveryMethod + " Order total:" + totalAmount + " Delivery fee:R" + calcDeliveryFee() + " Grand total:R" + calcGrandTotal());
+}
+
+}
+
+
+
+
+
+
+
+
+

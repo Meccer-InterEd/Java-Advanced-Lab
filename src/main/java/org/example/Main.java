@@ -4,29 +4,26 @@ import java.math.BigDecimal;
 
 public class Main {
     public static void main(String[] args) {
-        Order order = new Order(
-                "ORD-1001",
-                "Lerato",
-                new BigDecimal("249.99"),
-                DeliveryMethod.STANDARD_DELIVERY
-        );
-        order.Payment(new BigDecimal("290.99"));
+        Order order = new Order("YTU-1001", "Thabo", new BigDecimal(249.99), DeliveryMethod.STANDARD_DELIVERY);
+        order.confirmOrder();
+        order.Summary();
 
-        Order order2 = new Order(
-                "  SFG-1006",
-                "Karabo",
-                new BigDecimal("100.00"),
-                DeliveryMethod.COLLECTION
-        );
-        order2.Payment(new BigDecimal("100.00"));
+        Order order1 = new Order("YTU-1002", "Karabo", new BigDecimal(450.99), DeliveryMethod.STANDARD_DELIVERY);
+     order1.setPaymentStatus(PaymentStatus.PAID);
+        order1.confirmOrder();
+        order1.nextStatus();
+        order1.nextStatus();
+        order1.nextStatus();
+        order1.nextStatus();
+        order1.Summary();
 
-        Order order3 = new Order(
-                "  FTG-1009",
-                "Thabo",
-                new BigDecimal("1000.99"),
-                DeliveryMethod.EXPRESS_DELIVERY
-        );
-        order3.Payment(new BigDecimal("1000.00"));
+        Order order2 = new Order("YTU-1003", "Palesa", new BigDecimal(180.99), DeliveryMethod.STANDARD_DELIVERY);
+        order2.setPaymentStatus(PaymentStatus.PAID);
+        order2.confirmOrder();
+
+        order2.nextStatus();
+        order2.cancelOrder();
+
+        order2.Summary();
     }
-
 }
