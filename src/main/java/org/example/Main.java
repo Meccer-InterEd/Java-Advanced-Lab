@@ -1,10 +1,16 @@
 package org.example;
 
-
-import jdk.swing.interop.SwingInterOpUtils;
+import org.example.Lab1.DeliveryMethod;
+import org.example.Lab1.Order;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Do good and be productive!!");
+
+        Order order = new Order(
+                1001,
+                "Lerato",
+                249.99,
+                DeliveryMethod.STANDARD_DELIVERY
+        );
         }
     }
