@@ -3,6 +3,7 @@ package lab.enums.classes;
 import lab.enums.DeliveryMethod;
 import lab.enums.OrderStatus;
 import lab.enums.PaymentStatus;
+import lab.enums.classes.exception.MyException;
 
 public class Order {
 
@@ -117,7 +118,7 @@ public class Order {
         return delivery;
     }
 
-    public void setDelivery(DeliveryMethod delivery) {
+    public void setDelivery(DeliveryMethod delivery) throws MyException {
 
         if (( this.orderStatus == OrderStatus.PLACED || this.orderStatus == OrderStatus.CONFIRMED || this.orderStatus == OrderStatus.PREPARING ))
         {
@@ -132,7 +133,7 @@ public class Order {
             this.delivery = delivery;
         }
         else {
-            throw new IllegalArgumentException("Cannot set delivery method, while almost done");
+            throw new MyException("Cannot set delivery method, while almost done");
         }
     }
 
