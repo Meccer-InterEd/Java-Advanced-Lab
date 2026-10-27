@@ -50,13 +50,14 @@ public class Order {
     }
 
     public void cancelOrder() throws InterruptedException {
-        if (orderStatus == OrderStatus.READY_FOR_COLLECTION
-                || orderStatus == OrderStatus.OUT_FOR_DELIVERY
-                || orderStatus == OrderStatus.DELIVERED){
-            System.out.println("\nOrder cannot be cancelled at this moment! It is already out for delivery.");
+        if (orderStatus == OrderStatus.READY_FOR_COLLECTION){
+            System.out.println("\nOrder cannot be cancelled at this moment! As it is ready for collection.");
 
+        } else if (orderStatus == OrderStatus.OUT_FOR_DELIVERY || orderStatus == OrderStatus.DELIVERED){
+            System.out.println("\nOrder cannot be cancelled at this moment! As it is out for delivery / has been delivered.");
         }
         orderCancelled("\n"+customerName+" has cancelled their order!!!",orderNumber);
+        didUserCancel = true;
     }
 
     private void orderSummary(){
