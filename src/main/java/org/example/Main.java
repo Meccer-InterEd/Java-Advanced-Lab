@@ -13,8 +13,11 @@ public class Main {
                 new BigDecimal("249.99"),
                 DeliveryMethod.STANDARD_DELIVERY
         );
-
+        order.pay(new BigDecimal("350"));
         order.displayDetails();
-        order.confirmPayment(new BigDecimal("350"));
+        order.updateStatus();
+        order.updateStatus();
+        order.updateStatus();
+        order.updateStatus();
     }
     }
