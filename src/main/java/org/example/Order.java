@@ -16,9 +16,9 @@ public class Order {
         setOrderNumber(orderNumber);
         setCustomer(customer);
         setTotalAmount(totalAmount);
-        setOrderStatus(orderStatus);
-        setPaymentStatus(paymentStatus);
-        setDeliveryMethod(deliveryMethod);
+        setOrderStatus(OrderStatus.PLACED);
+        setPaymentStatus(PaymentStatus.PENDING);
+        setDeliveryMethod(DeliveryMethod.COLLECTION);
     }
 
     public void setOrderNumber(String orderNumber) {
@@ -96,26 +96,26 @@ public class Order {
 
     }
 
-    void cancelOrder(OrderStatus status){
+    void cancelOrder(){
 
-        if(status == OrderStatus.OUT_FOR_DELIVERY){
-            System.out.println("The order can no longer be cancelled!");
+        if(this.orderStatus == OrderStatus.OUT_FOR_DELIVERY || this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED){
+
+            throw new IllegalArgumentException("The order can no longer be cancelled when it already " + this.orderStatus);
         }
-        else{
-            status = OrderStatus.CANCELLED;
-            System.out.println("Order cancelled!");
-        }
+        this.orderStatus = OrderStatus.CANCELLED;
+        this.paymentStatus = PaymentStatus.REFUNDED;
+        System.out.println("Order " + this.orderNumber + " has been canceled!");
     }
 
-    void calculateDelivery(DeliveryMethod deliveryMethod){
+    void calculateDelivery(){
         double deliveryAmt = 0;
 
-        if(deliveryMethod == DeliveryMethod.COLLECTION){
-            deliveryAmt = 0;
-        }else if(deliveryMethod == DeliveryMethod.STANDARD_DELIVERY){
-            deliveryAmt = 35;
-        }else if(deliveryMethod == DeliveryMethod.EXPRESS_DELIVERY){
-            deliveryAmt = 65;
+        switch(deliveryMethod){
+            case COLLECTION : deliveryAmt = 0;break;
+            case STANDARD_DELIVERY: deliveryAmt = 35.00; break;
+            case EXPRESS_DELIVERY: deliveryAmt = 65.00; break;
+            default:
+                System.out.println("Invalid Option"); break;
         }
     }
 
