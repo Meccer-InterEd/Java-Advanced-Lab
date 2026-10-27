@@ -11,8 +11,9 @@ public class Main {
                     DeliveryMethod.STANDARD_DELIVERY
             );
             order.Pay(new BigDecimal("285.00"));
+            order.cancelOrder();
             order.orderProgress();
-            order.orderSummary();
+//            order.orderSummary();
 
 //            Order order2 = new Order(
 //                    "ORD-1002",

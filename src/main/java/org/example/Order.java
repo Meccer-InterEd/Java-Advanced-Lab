@@ -41,6 +41,7 @@ public class Order {
             orderConfirmed("\nOrder has been confirmed",orderNumber);
             delayExecution(5000);
             orderPreparing("\nOrder is being prepared",orderNumber);
+            delayExecution(5000);
 //            orderProgress();
         } else {
             paymentFailed("\nPayment failed due to insufficient funds!!!");
@@ -48,7 +49,17 @@ public class Order {
         }
     }
 
-    public void orderSummary(){
+    public void cancelOrder() throws InterruptedException {
+        if (orderStatus == OrderStatus.READY_FOR_COLLECTION
+                || orderStatus == OrderStatus.OUT_FOR_DELIVERY
+                || orderStatus == OrderStatus.DELIVERED){
+            System.out.println("\nOrder cannot be cancelled at this moment! It is already out for delivery.");
+
+        }
+        orderCancelled("\n"+customerName+" has cancelled their order!!!",orderNumber);
+    }
+
+    private void orderSummary(){
         System.out.println("============Order Summary============");
         System.out.println("Customer Name: "+customerName);
         System.out.println("Order Number: "+orderNumber);
@@ -65,41 +76,49 @@ public class Order {
     private void paymentPaid(String message){
         paymentStatus = PaymentStatus.PAID;
         System.out.println(message);
+        orderSummary();
     }
 
     private void paymentFailed(String message){
         paymentStatus = PaymentStatus.FAILED;
         System.out.println(message);
+        orderSummary();
     }
 
     private void orderConfirmed(String message, String orderNum){
         orderStatus = OrderStatus.CONFIRMED;
         System.out.println(message+" : Alert for order number "+orderNum);
+        orderSummary();
     }
 
     private void orderPreparing(String message, String orderNum){
         orderStatus = OrderStatus.PREPARING;
         System.out.println(message+" : Alert for order number "+orderNum);
+        orderSummary();
     }
 
     private void orderCancelled(String message, String orderNum){
         orderStatus = OrderStatus.CANCELLED;
         System.out.println(message+" : Alert for order number "+orderNum);
+        orderSummary();
     }
 
     private void orderReadyForCollection(String message, String orderNum){
         orderStatus = OrderStatus.READY_FOR_COLLECTION;
         System.out.println(message+" : Alert for order number "+orderNum+"\n\n");
+        orderSummary();
     }
 
     private void orderOutForDelivery(String message, String orderNum){
         orderStatus = OrderStatus.OUT_FOR_DELIVERY;
         System.out.println(message+" : Alert for order number "+orderNum);
+        orderSummary();
     }
 
     private void orderDelivered(String message, String orderNum){
         orderStatus = OrderStatus.DELIVERED;
-        System.out.println(message+" : Alert for order number "+orderNum+"\n\n");
+        System.out.println(message+" : Alert for order number "+orderNum);
+        orderSummary();
     }
 
     private void delayExecution(int milliseconds) throws InterruptedException {
@@ -122,8 +141,6 @@ public class Order {
                 delayExecution(4000);
                 orderDelivered("\nOrder delivered",orderNumber);
             }
-        } else {
-            System.out.println("\n Cannot progress to the next stage with the order, as it has been cancelled!!!");
         }
     }
 }
