@@ -9,28 +9,24 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-        Order order = new Order(
-                "ORD-1001",
-                "Lerato",
-                new BigDecimal("249.99"),
-                DeliveryMethod.STANDARD_DELIVERY
-        );
-
+   DisplayMethod menu = new DisplayMethod();
         boolean running = true;
 
         while (running) {
 
             // display the menu
-            System.out.println("======== FOOD DELIVERY SYSTEM =======");
-            System.out.println("1. View payment status");
-            System.out.println("2. Confirm payment");
-            System.out.println("3. Mark payment as failed");
-            System.out.println("4. Confirm order");
-            System.out.println("5. Move order to next status");
-            System.out.println("6. Cancel order");
-            System.out.println("7. View order summary");
+            System.out.println("=========== Real-World Programming  ===========");
+            System.out.println("1. Lab01 Food Delivery Order");
+            System.out.println("2. Lab02 Payment System");
+            System.out.println("3. Lab03 Records for Booking and Reporting");
+            System.out.println("4. Lab04 Custom Annotations for Business Rules");
+            System.out.println("5. Lab05 Vehicle Rental");
+            System.out.println("6. Lab05 Employee Payroll");
+            System.out.println("7. Lab06 Strategy Pattern in a Delivery App");
+            System.out.println("8. Lab07 Clinic Booking System");
+            System.out.println("9. Lab08 Community Event Booking Platform");
             System.out.println("8. Exit");
+
 
             System.out.print("Enter your choice: "); // enter the option
 
@@ -44,29 +40,31 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    order.displayPaymentStatus();
+                    menu.DisplayFoodDelivery();
                     break;
                 case 2:
-                    order.setPaymentStatus(PaymentStatus.PAID);
+                    System.out.println("Comming Soon");
                     break;
                 case 3:
-                    order.setPaymentStatus(PaymentStatus.FAILED);
+                    System.out.println("Comming Soon");
                     break;
                 case 4:
-                    order.confirmingOrder();
+                    System.out.println("Comming Soon");
                     break;
                 case 5:
-                    order.nextStatus();
+                    System.out.println("Comming Soon");
                     break;
                 case 6:
-                    order.cancelOrder();
+                    System.out.println("Comming Soon");
                     break;
                 case 7:
-                    order.displayOrderSummary();
+                    System.out.println("Comming Soon");
                     break;
                 case 8:
                     running = false;
-                    System.out.println("Thank you for using the system.");
+
+                    System.out.println("You went back to the  Real-World Programming System .");
+
                     break;
                 default:
                     System.out.println("Invalid choice. Please select 1 to 7.");
