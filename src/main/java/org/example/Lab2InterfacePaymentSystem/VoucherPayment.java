@@ -4,10 +4,12 @@ import java.math.BigDecimal;
 
 public class VoucherPayment implements PaymentMethod{
     private BigDecimal voucherBalance;
+    String accHolder;
 
 
-    public VoucherPayment(String voucherCode,BigDecimal voucherBalance){
+    public VoucherPayment(String accHolder,BigDecimal voucherBalance){
         this.voucherBalance = voucherBalance;
+        this.accHolder = accHolder;
 
     }
 
@@ -24,6 +26,6 @@ public class VoucherPayment implements PaymentMethod{
 
     @Override
     public String getDisplayName() {
-        return "Voucher Payment Method";
+        return accHolder+ " Paid using the Voucher Payment Method";
     }
 }
