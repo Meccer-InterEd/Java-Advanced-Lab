@@ -1,9 +1,9 @@
 package org.example;
 
-import static org.example.OrderStatus.CANCELLED;
-import static org.example.OrderStatus.CONFIRMED;
+import java.util.PrimitiveIterator;
+
+import static org.example.OrderStatus.*;
 import static org.example.PaymentStatus.*;
-import static org.example.PaymentStatus.PAID;
 
 public class Order {
     private String orderNumber;
@@ -12,21 +12,16 @@ public class Order {
     private PaymentStatus status;
     private DeliveryMethod deliveryMethod;
     private OrderStatus orderStatus;
-    private double deliveryFee;
+    private  OrderStatus currentStatus;
 
-    public Order(String orderNumber, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod) {
+
+    public Order(String orderNumber, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod, OrderStatus orderStatus) {
         setOrderNumber(orderNumber);
         setCustomerName(customerName);
         setTotalAmount(totalAmount);
         setStatus(status);
         setDeliveryMethod(deliveryMethod);
-        this.orderStatus = OrderStatus.PLACED;
-
-        this.deliveryFee = switch (getDeliveryMethod()) {
-            case EXPRESS_DELIVERY -> 65.00;
-            case STANDARD_DELIVERY -> 35.00;
-            case COLLECTION -> 0.0;
-        };
+        this.orderStatus = orderStatus;
 
     }
 
@@ -48,6 +43,10 @@ public class Order {
 
     public DeliveryMethod getDeliveryMethod() {
         return deliveryMethod;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
     public void setOrderNumber(String orderNumber) {
@@ -92,37 +91,41 @@ public class Order {
         }
     }
 
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public void setCurrentStatus(OrderStatus currentStatus) {
+        this.currentStatus = currentStatus;
     }
+
+
 
     public void nextStatus(OrderStatus targetStatus) {
         switch (this.orderStatus) {
             case PLACED:
-                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
+                if (targetStatus == CONFIRMED || targetStatus == OrderStatus.CANCELLED){
                     this.orderStatus = targetStatus;
                     System.out.println(targetStatus);
                     return;
                 }
                 break;
             case CONFIRMED:
-                if (targetStatus == OrderStatus.PREPARING || targetStatus == OrderStatus.CANCELLED) {
+                if (targetStatus == PREPARING || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
                     System.out.println(targetStatus);
                     return;
                 }
                 break;
             case PREPARING:
-                if (targetStatus == OrderStatus.IN_PROGRESS ||
-                        targetStatus == OrderStatus.READY_FOR_COLLECTION || targetStatus == OrderStatus.OUT_FOR_DELIVERY) {
+                if (targetStatus == OrderStatus.READY_FOR_COLLECTION || targetStatus == OrderStatus.OUT_FOR_DELIVERY) {
                     this.orderStatus = targetStatus;
                     System.out.println(targetStatus);
                     return;
                 }
                 break;
-            case IN_PROGRESS:
             case READY_FOR_COLLECTION:
+                if( targetStatus == OrderStatus.COLLECTED){
+                    this.orderStatus = targetStatus;
+                    System.out.println(targetStatus);
+                    return;
+                }
             case OUT_FOR_DELIVERY:
                 if (targetStatus == OrderStatus.DELIVERED) {
                     this.orderStatus = targetStatus;
@@ -144,32 +147,37 @@ public class Order {
         throw new IllegalStateException("Invalid order move: Cannot change from " + this.orderStatus + " to " + targetStatus);
     }
 
+     void assignStatus(){
 
+         double deliveryFee = switch (getDeliveryMethod()) {
+             case EXPRESS_DELIVERY -> 65.00;
+             case STANDARD_DELIVERY -> 35.00;
+             case COLLECTION -> 0.0;
+         };
 
-    public void orderDetails(){
-        if (getStatus() == PENDING) {
-            System.out.println("\nAwaiting Payment");
-            nextStatus(CONFIRMED);
-
-        } else if (getStatus() == PAID) {
-            System.out.println("\nPayment Successful");
-            nextStatus(CONFIRMED);
-
-        } else if (getStatus() == FAILED) {
-            System.out.println("\nPayment Failed");
-            nextStatus(CANCELLED);
-
-        } else {
-            throw new IllegalArgumentException("Invalid Payment Status Match");
-        }
+             if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.CONFIRMED) {
+                 this.nextStatus(OrderStatus.PLACED);
+             } else if (this.status == PaymentStatus.FAILED) {
+                 this.nextStatus(OrderStatus.CANCELLED);
+             } else if (this.status == PaymentStatus.PENDING && this.orderStatus == OrderStatus.IN_PROGRESS) {
+                 this.nextStatus(OrderStatus.PLACED);
+             } else if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.READY_FOR_COLLECTION) {
+                 this.nextStatus(OrderStatus.COLLECTED);
+             }else if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.OUT_FOR_DELIVERY) {
+                 this.nextStatus(DELIVERED);
+             }else if (this.status == PENDING && this.orderStatus == OrderStatus.PLACED) {
+                 this.nextStatus(CONFIRMED);
+             } else {
+                 throw new IllegalArgumentException("Invalid Payment Status Match");
+             }
 
         System.out.println("Customer Name: " + getCustomerName());
-        System.out.println("Order status: " + getOrderStatus());
         System.out.printf("Total Amount is: R%.2f\n", getTotalAmount());
         System.out.printf("Delivery fee is: R%.2f\n", deliveryFee);
         System.out.printf("Grand Total Amount: R%.2f\n", (getTotalAmount() + deliveryFee));
+        System.out.println("Current order status: " + currentStatus);
+        System.out.println("Proceeding order status: " + getOrderStatus());
 
-        return;
     }
 
 }
