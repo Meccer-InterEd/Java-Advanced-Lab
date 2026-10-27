@@ -9,16 +9,17 @@ public class Order {
     private PaymentStatus paymentStatus;
     private DeliveryMethod deliveryMethod;
 
-    Order(){}
+    Order() {
+    }
 
-    Order(String orderNumber, String customer, double totalAmount, OrderStatus orderStatus, PaymentStatus paymentStatus, DeliveryMethod deliveryMethod){
+    Order(String orderNumber, String customer, double totalAmount, DeliveryMethod deliveryMethod) {
 
         setOrderNumber(orderNumber);
         setCustomer(customer);
         setTotalAmount(totalAmount);
         setOrderStatus(OrderStatus.PLACED);
         setPaymentStatus(PaymentStatus.PENDING);
-        setDeliveryMethod(DeliveryMethod.COLLECTION);
+        setDeliveryMethod(deliveryMethod);
     }
 
     public void setOrderNumber(String orderNumber) {
@@ -68,32 +69,54 @@ public class Order {
     public DeliveryMethod getDeliveryMethod() {
         return deliveryMethod;
     }
-    void cancelAble(){
-        if(this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED){
+
+    void cancelAble() {
+        if (this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Cannot cancel an order that is " + this.orderStatus);
         }
     }
 
-    double subtotal = totalAmount + calculateDelivery();
+    double calculateDelivery() {
+        double deliveryAmt = 0;
 
-    void confirmOrder(double amount){
+        switch (deliveryMethod) {
+            case COLLECTION:
+                deliveryAmt = 0;
+                break;
+            case STANDARD_DELIVERY:
+                deliveryAmt = 35.00;
+                break;
+            case EXPRESS_DELIVERY:
+                deliveryAmt = 65.00;
+                break;
+            default:
+                System.out.println("Invalid Option");
+                break;
+        }
+        return deliveryAmt;
+    }
 
-        if(amount >= subtotal){
+    double getSubtotal() {
+        return totalAmount + calculateDelivery();
+    }
+
+    void confirmOrder(double amount) {
+
+        if (amount >= getSubtotal()) {
             this.paymentStatus = PaymentStatus.PAID;
             this.orderStatus = OrderStatus.CONFIRMED;
             System.out.println("Payment successful!");
             System.out.println("Order " + this.orderNumber + " is confirmed");
-        }
-        else{
+        } else {
             this.paymentStatus = PaymentStatus.FAILED;
             this.orderStatus = OrderStatus.PLACED;
             System.out.println("Insufficient funds.");
         }
     }
 
-    void cancelOrder(){
+    void cancelOrder() {
 
-        if(this.orderStatus == OrderStatus.OUT_FOR_DELIVERY || this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED){
+        if (this.orderStatus == OrderStatus.OUT_FOR_DELIVERY || this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED) {
 
             throw new IllegalArgumentException("The order can no longer be cancelled when it already " + this.orderStatus);
         }
@@ -102,24 +125,7 @@ public class Order {
         System.out.println("Order " + this.orderNumber + " has been canceled!");
     }
 
-    double calculateDelivery(){
-        double deliveryAmt = 0;
-
-        switch(deliveryMethod){
-            case COLLECTION : deliveryAmt = 0;break;
-            case STANDARD_DELIVERY: deliveryAmt = 35.00; break;
-            case EXPRESS_DELIVERY: deliveryAmt = 65.00; break;
-            default:
-                System.out.println("Invalid Option"); break;
-        }
-        return deliveryAmt;
-    }
-
-
-
-
-
-    void display(){
+    void display() {
 
         System.out.println("========================================");
         System.out.println("           ORDER SUMMARY                ");
@@ -131,8 +137,8 @@ public class Order {
         System.out.println("Payment Status : " + paymentStatus);
         System.out.println("----------------------------------------");
         System.out.println("Order Total    : R " + totalAmount);
-        //System.out.println("Delivery Fee   : R " + deliveryFee);
-        //System.out.println("Grand Total    : R " + grandTotal);
+        //System.out.println("Delivery Fee   : R " + deliveryAmt);
+        System.out.println("Grand Total    : R " + getSubtotal());
         System.out.println("========================================\n");
     }
 }
