@@ -16,6 +16,7 @@ public class Main {
         order.displaySummary();
         order.nextStatus();
         order.displaySummary();
+
     }
 }
 
