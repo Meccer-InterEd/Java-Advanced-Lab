@@ -9,12 +9,10 @@ public class Main {
 
         Order order = new Order("0000000001", "Siyabonga", 180.22, PAID, COLLECTION, READY_FOR_COLLECTION);
         Order order1 = new Order("0000000002", "Makwa", 250.22, PENDING, STANDARD_DELIVERY, IN_PROGRESS);
-        Order order2 = new Order("0000000003", "Lona", 5.05, FAILED, EXPRESS_DELIVERY, PLACED);
+        Order order2 = new Order("0000000003", "Lona", 5.15, FAILED, EXPRESS_DELIVERY, PLACED);
         Order order3 = new Order("0000000004", "Ntiyiso", 100.00, PAID, EXPRESS_DELIVERY, OUT_FOR_DELIVERY);
 
         Order[] orders = {order, order1, order2, order3};
-
-
         for (Order _orders : orders) {
             _orders.setCurrentStatus(_orders.getOrderStatus());
             _orders.assignStatus();
