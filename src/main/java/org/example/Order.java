@@ -9,6 +9,7 @@ public class Order {
     private PaymentStatus status;
     private DeliveryMethod deliveryMethod;
     private OrderStatus orderStatus;
+    private OrderStatus currentStatus;
 
     public Order(String order_Number, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod, OrderStatus orderStatus) {
         setOrder_Number(order_Number);
@@ -67,6 +68,14 @@ public class Order {
         }
     }
 
+    public void setCurrentStatus(OrderStatus currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
+    public OrderStatus getCurrentStatus() {
+        return currentStatus;
+    }
+
     public DeliveryMethod getDeliveryMethod() {
         return deliveryMethod;
     }
@@ -91,14 +100,14 @@ public class Order {
                     return;
                 }
                 break;
-            case CONFIRMED:
-                if (targetStatus == OrderStatus.PREPARING || targetStatus == OrderStatus.CANCELLED) {
+            case PLACED:
+                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
                     return;
                 }
                 break;
-            case PLACED:
-                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
+            case CONFIRMED:
+                if (targetStatus == OrderStatus.PREPARING || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
                     return;
                 }
@@ -137,7 +146,7 @@ public class Order {
 
     void assignStatus() {
         if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.CONFIRMED) {
-            this.nextStatus(OrderStatus.PREPARING);
+            this.nextStatus(OrderStatus.PLACED);
         } else if (this.status == PaymentStatus.FAILED) {
             this.nextStatus(OrderStatus.CANCELLED);
         } else if (this.status == PaymentStatus.PENDING && this.orderStatus == OrderStatus.IN_PROGRESS) {
@@ -161,6 +170,7 @@ public class Order {
         System.out.printf("Total Amount is: R%.2f\n", getTotalAmount());
         System.out.printf("Delivery fee is: R%.2f\n", deliveryFee);
         System.out.printf("Grand Total Amount: R%.2f\n", (getTotalAmount() + deliveryFee));
-        System.out.println("Order status: " + getOrderStatus());
+        System.out.println("Initial Order Status is: " + getCurrentStatus());
+        System.out.println("Current Order Status: " + getOrderStatus());
     }
 }

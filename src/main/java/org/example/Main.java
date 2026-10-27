@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.Collections;
-
 import static org.example.DeliveryMethod.*;
 import static org.example.OrderStatus.*;
 import static org.example.PaymentStatus.*;
@@ -18,6 +16,7 @@ public class Main {
 
 
         for (Order _orders : orders) {
+            _orders.setCurrentStatus(_orders.getOrderStatus());
             _orders.assignStatus();
             System.out.println();
         }
