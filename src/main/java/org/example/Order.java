@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Order {
     private String orderNum;
     private String name;
-    private BigDecimal totamt;
+    private BigDecimal totAmt;
 
     DeliveryMethod deliveryMethod ;
     PaymentStatus paymentStatus;
@@ -14,7 +14,7 @@ public class Order {
     Order(String orderNum, String customerName, String totalAmnt, OrderStatus status, PaymentStatus paymentStatus, DeliveryMethod deliveryMethod){
         this.name = customerName;
         this.orderNum = orderNum;
-        this.totamt = Money.of(totalAmnt);
+        this.totAmt = Money.of(totalAmnt);
         this.paymentStatus = paymentStatus;
         this.orderStatus = status;
         this.deliveryMethod = deliveryMethod;
@@ -33,7 +33,7 @@ public class Order {
     }
 
     public BigDecimal getTotamt() {
-        return totamt;
+        return totAmt;
     }
 
     void confirmOrder(){
