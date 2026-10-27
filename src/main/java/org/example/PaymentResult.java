@@ -1,4 +1,7 @@
 package org.example;
 
-public record PaymentResult() {
+import java.math.BigDecimal;
+
+public record PaymentResult(boolean successful, String reference, String message) {
+
 }
