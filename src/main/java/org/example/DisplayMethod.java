@@ -82,69 +82,87 @@ public class DisplayMethod {
         scanner.close();
     }
 
+
     public void DisplayPayment() {
-        System.out.println("===== ONLINE STORE CHECKOUT =====");
-        System.out.println("1. Card Payment");
-        System.out.println("2. Instant EFT");
-        System.out.println("3. Store Voucher");
-        System.out.print("Choose a payment method: ");
+        boolean running = true;
+        while (running) {
 
-        String choice = scanner.nextLine().trim();
+            System.out.println("===== ONLINE STORE CHECKOUT =====");
+            System.out.println("1. Card Payment");
+            System.out.println("2. Instant EFT");
+            System.out.println("3. Voucher Payment");
+            System.out.println("4. Exit");
+            System.out.print("Select your choice: ");
 
-        PaymentMethod paymentMethod;
+            String choice = scanner.nextLine().trim();
 
-        switch (choice) {
-            case "1" -> paymentMethod = new CardPayment();
-            case "2" -> paymentMethod = new InstantEftPayment();
-            case "3" -> paymentMethod = new VoucherPayment();
+            PaymentMethod paymentMethod;
 
-            default -> {
-                System.out.println("ERROR: Invalid payment option. Choose 1, 2, or 3.");
-                return;
-            }
-        }
+            switch (choice) {
+                case "1":
+                    paymentMethod = new CardPayment();
+                    break;
+                case "2":
+                    paymentMethod = new InstantEftPayment();
+                    break;
+                case "3":
+                    paymentMethod = new VoucherPayment();
+                    break;
+                case "4":
+                    running = false;
+                    System.out.println("Thank you for using the system.");
+                    continue;
 
-        System.out.print("Enter payment amount: R");
-        String input = scanner.nextLine().trim();
-
-        if (input.isEmpty()) {
-            System.out.println("ERROR: Payment amount cannot be empty.");
-            return;
-        }
-
-        BigDecimal amount;
-
-        try {
-            amount = new BigDecimal(input);
-        } catch (NumberFormatException e) {
-            System.out.println("ERROR: Invalid amount. Enter numbers only, e.g. 250.00.");
-            return;
-        }
-
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            System.out.println("ERROR: Amount must be greater than zero.");
-            return;
-        }
-
-        try {
-            PaymentResult result = paymentMethod.pay(amount);
-
-            if (result == null) {
-                System.out.println("ERROR: Payment could not be processed. No result was returned.");
-                return;
+                default:
+                    System.out.println("Invalid option. Choose 1, 2, 3, or 4.");
+                    continue;
             }
 
-            System.out.println("\n===== PAYMENT RECEIPT =====");
-            System.out.println("Payment Method: " + paymentMethod.getDisplayName());
-            System.out.println("Transaction Reference: " + result.reference());
-            System.out.println("Payment Status: "
-                    + (result.successful() ? "SUCCESS" : "FAILED"));
-            System.out.println("Message: " + result.message());
+            System.out.print("Enter payment amount: R");
+            String input = scanner.nextLine().trim();
 
-        } catch (RuntimeException e) {
-            System.out.println("ERROR: Something went wrong while processing the payment.");
-            System.out.println("Please try again later.");
+            if (input.isEmpty()) {
+                System.out.println("Payment amount cannot be empty.");
+                continue;
+            }
+
+            BigDecimal amount;
+
+            try {
+                amount = new BigDecimal(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid amount. Enter a number, e.g. 250.00.");
+                continue;
+            }
+
+            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+                System.out.println("Amount must be greater than zero.");
+                continue;
+            }
+
+            try {
+                PaymentResult result = paymentMethod.pay(amount);
+
+                if (result == null) {
+                    System.out.println(
+                            "No payment result was returned."
+                    );
+                    continue;
+                }
+
+                System.out.println("============ PAYMENT RECEIPT ===========");
+                System.out.println("Payment Method: " + paymentMethod.getDisplayName());
+                System.out.println("Transaction Reference: " + result.reference());
+                System.out.println("Payment Status: "+ (result.successful() ? "SUCCESS" : "FAILED")
+                );
+                System.out.println("Message: " + result.message());
+
+            } catch (RuntimeException e) {
+                System.out.println(" Something went wrong while processing payment.");
+                System.out.println("Please try again later.");
+            }
         }
     }
+
 }
 
