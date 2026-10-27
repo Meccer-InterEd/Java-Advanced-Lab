@@ -125,6 +125,37 @@ public class Order {
         System.out.println("Order " + this.orderNumber + " has been canceled!");
     }
 
+    void nextStatus(){
+
+        if(this.orderStatus == OrderStatus.DELIVERED || this.orderStatus == OrderStatus.CANCELLED){
+            throw new IllegalArgumentException("Order " + orderNumber+ " in this state cannot be progressed any further");
+        }
+
+        switch(this.orderStatus){
+            case PLACED :
+                if(this.paymentStatus != PaymentStatus.PAID){
+                    throw new IllegalArgumentException("Payment has not been confirmed!");
+                }
+                this.orderStatus = OrderStatus.CONFIRMED; break;
+            case CONFIRMED:
+                this.orderStatus = OrderStatus.PREPARING; break;
+            case PREPARING:
+                if(this.deliveryMethod == DeliveryMethod.COLLECTION) {
+                    this.orderStatus = OrderStatus.READY_FOR_COLLECTION;
+                    System.out.println("Order waiting to be collected.");
+                }else{
+                    this.orderStatus = OrderStatus.OUT_FOR_DELIVERY;
+            } break;
+            case READY_FOR_COLLECTION:
+                System.out.println(orderNumber + " ready for collection."); break;
+            case OUT_FOR_DELIVERY:
+                this.orderStatus = OrderStatus.DELIVERED;
+                System.out.println(orderNumber + " is out for delivery");break;
+            default: throw new IllegalArgumentException("Invalid status.");
+        }
+        System.out.println("Order " + orderNumber + " has moved to " + orderStatus);
+    }
+
     void display() {
 
         System.out.println("========================================");
