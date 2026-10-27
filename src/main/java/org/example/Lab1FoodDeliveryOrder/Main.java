@@ -20,5 +20,12 @@ public class Main {
         order2.confirmPayment(new BigDecimal("100.00"));
         order2.nextStatus();
 
+        Order order3 = new Order("ORD-1003","Heisham",new BigDecimal("550.00"),DeliveryMethod.EXPRESS_DELIVERY);
+        order3.display();
+        order3.confirmPayment(new BigDecimal("650.00"));
+        order3.nextStatus();
+        order3.nextStatus();
+        order3.cancelOrder();
+
     }
 }
