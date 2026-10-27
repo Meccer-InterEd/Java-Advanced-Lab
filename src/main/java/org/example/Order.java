@@ -12,6 +12,7 @@ public class Order {
     OrderStatus orderStatus;
 
     Order(String orderNum, String customerName, String totalAmnt, OrderStatus status, PaymentStatus paymentStatus, DeliveryMethod deliveryMethod){
+        this.name = customerName;
         this.orderNum = orderNum;
         this.totamt = Money.of(totalAmnt);
         this.paymentStatus = paymentStatus;
@@ -43,8 +44,22 @@ public class Order {
             System.out.println("Please Make Payment to confirm Order");
         }
     }
+    void cancelOrder(){
+        if(orderStatus != OrderStatus.OUT_FOR_DELIVERY){
+            orderStatus = OrderStatus.CANCELLED;
+        }else {
+            System.out.println("Your order cannot be canceled when out for delivery");
+        }
+    }
 
-//    void paymentStatuses
+    void displayStatus(){
+        System.out.println("Customer Name: " + name +
+                " Order number: "+ orderNum +
+                " Order Status: " + orderStatus +
+                " Payment Status: "+ paymentStatus);
+    }
+
+
     
 
 
@@ -97,5 +112,6 @@ public class Order {
         }
         return null;
     }
+
 
 }
