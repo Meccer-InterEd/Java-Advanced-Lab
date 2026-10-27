@@ -4,16 +4,34 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class InstantEftPayment implements PaymentMethod{
- BigDecimal balance;
+    private BigDecimal balance = new BigDecimal("2000.00");
  PaymentResult paymentResult;
     @Override
     public PaymentResult pay(BigDecimal amount) {
-        if(amount.compareTo(new BigDecimal(String.valueOf(balance)))>=0){
-          return new PaymentResult(true,"AO2-002"," You have failed to make the EFT");
 
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return new PaymentResult(
+                    false,
+                    "EFT-001",
+                    "Invalid payment amount."
+            );
         }
-        return new PaymentResult(true,"A02-002"," You have successfully make the IntantEfPayment");
 
+        if (amount.compareTo(balance) > 0) {
+            return new PaymentResult(
+                    false,
+                    "EFT-001",
+                    "Payment failed. Insufficient balance."
+            );
+        }
+
+        balance = balance.subtract(amount);
+
+        return new PaymentResult(
+                true,
+                "EFT-001",
+                "Instant EFT payment successful."
+        );
     }
 
 

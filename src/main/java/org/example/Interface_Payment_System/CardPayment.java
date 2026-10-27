@@ -1,16 +1,43 @@
 package org.example.Interface_Payment_System;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class CardPayment implements PaymentMethod {
-    BigDecimal balance;
+    BigDecimal balance = new BigDecimal("1000.00");
+    public String generateCardReference() {
+
+        String date = LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+        );
+
+        String uniqueId = UUID.randomUUID()
+                .toString()
+                .substring(0, 8)
+                .toUpperCase();
+
+        return "CARD-" + date + "-" + uniqueId;
+    }
     @Override
     public PaymentResult pay(BigDecimal amount) {
 
-        if(amount.compareTo(new BigDecimal(String.valueOf(balance)))>=0){
-            return new PaymentResult(false,"A01-001","Failed to make a Payment");
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return new PaymentResult(
+                    false,
+                    "",
+                    "Invalid payment amount."
+            );
         }
-        return new PaymentResult(true,"A01-001"," You are Successfull");
+
+        String reference =generateCardReference();
+
+        return new PaymentResult(
+                true,
+                reference,
+                "Card payment completed successfully."
+        );
     }
 
     @Override

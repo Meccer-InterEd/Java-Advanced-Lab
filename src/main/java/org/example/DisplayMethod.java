@@ -83,5 +83,68 @@ public class DisplayMethod {
     }
 
     public void DisplayPayment() {
+        System.out.println("===== ONLINE STORE CHECKOUT =====");
+        System.out.println("1. Card Payment");
+        System.out.println("2. Instant EFT");
+        System.out.println("3. Store Voucher");
+        System.out.print("Choose a payment method: ");
+
+        String choice = scanner.nextLine().trim();
+
+        PaymentMethod paymentMethod;
+
+        switch (choice) {
+            case "1" -> paymentMethod = new CardPayment();
+            case "2" -> paymentMethod = new InstantEftPayment();
+            case "3" -> paymentMethod = new VoucherPayment();
+
+            default -> {
+                System.out.println("ERROR: Invalid payment option. Choose 1, 2, or 3.");
+                return;
+            }
+        }
+
+        System.out.print("Enter payment amount: R");
+        String input = scanner.nextLine().trim();
+
+        if (input.isEmpty()) {
+            System.out.println("ERROR: Payment amount cannot be empty.");
+            return;
+        }
+
+        BigDecimal amount;
+
+        try {
+            amount = new BigDecimal(input);
+        } catch (NumberFormatException e) {
+            System.out.println("ERROR: Invalid amount. Enter numbers only, e.g. 250.00.");
+            return;
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            System.out.println("ERROR: Amount must be greater than zero.");
+            return;
+        }
+
+        try {
+            PaymentResult result = paymentMethod.pay(amount);
+
+            if (result == null) {
+                System.out.println("ERROR: Payment could not be processed. No result was returned.");
+                return;
+            }
+
+            System.out.println("\n===== PAYMENT RECEIPT =====");
+            System.out.println("Payment Method: " + paymentMethod.getDisplayName());
+            System.out.println("Transaction Reference: " + result.reference());
+            System.out.println("Payment Status: "
+                    + (result.successful() ? "SUCCESS" : "FAILED"));
+            System.out.println("Message: " + result.message());
+
+        } catch (RuntimeException e) {
+            System.out.println("ERROR: Something went wrong while processing the payment.");
+            System.out.println("Please try again later.");
+        }
     }
 }
+
