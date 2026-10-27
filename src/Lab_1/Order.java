@@ -27,7 +27,7 @@ public class Order {
     }
 
     public void pay() {
-        paymentStatus = PaymentStatus.FAILED;
+        paymentStatus = PaymentStatus.PAID;
     }
 
     public void confirmDetails() {
@@ -38,6 +38,18 @@ public class Order {
 
         }
     }
+      public void PrepareDetails() {
+
+        if (orderStatus == OrderStatus.CONFIRMED) {
+            orderStatus = OrderStatus.PREPARING;
+        }
+                    else {
+            System.out.println("Order must be confirmed");
+        }
+
+    }
+
+
 
     public void details() {
         System.out.println(orderNumber);
