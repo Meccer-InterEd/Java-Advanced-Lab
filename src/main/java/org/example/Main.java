@@ -18,5 +18,29 @@ public class Main {
             _orders.assignStatus();
             System.out.println();
         }
+
+        CheckoutService checkoutService = new CheckoutService();
+
+        PaymentMethod card = new CardPayment();
+        PaymentMethod eft = new InstantEftPayment();
+        PaymentMethod voucher = new VoucherPayment();
+
+
+        processTransaction(checkoutService, card, 20);
+
+        processTransaction(checkoutService, eft, 1670);
+
+        processTransaction(checkoutService, voucher, 200);
+
+        processTransaction(checkoutService, voucher, 150);
+    }
+
+    private static void processTransaction (CheckoutService service, PaymentMethod method, double amount){
+        PaymentResult result = service.checkout(method, amount);
+
+        System.out.println("------------------------------------------------");
+        System.out.println("Payment Method : " + method.getDisplayName());
+        System.out.println("Result         : " + (result.successful() ? "SUCCESSFUL" : "FAILED"));
+        System.out.println("Reference      : " + result.reference());
     }
 }
