@@ -103,7 +103,7 @@ public class Order {
 
 
     public void cancelOrder() {
-        if (this.status.equals(OrderStatus.OUT_FOR_DELIVERY) || this.status.equals(OrderStatus.READY_FOR_COLLECTION)) {
+        if (this.status.equals(OrderStatus.OUT_FOR_DELIVERY) || this.status.equals(OrderStatus.READY_FOR_COLLECTION ) || this.status.equals(OrderStatus.DELIVERED)) {
             System.out.println("Order can't be cancelled");
         } else {
             this.status = OrderStatus.CANCELLED;

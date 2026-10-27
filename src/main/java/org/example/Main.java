@@ -18,6 +18,6 @@ public class Main {
         order.updateStatus();
         order.updateStatus();
         order.updateStatus();
-        order.updateStatus();
+        order.cancelOrder();
     }
     }
