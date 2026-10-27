@@ -30,12 +30,12 @@ public class Order {
     public void cancelOrder() {
         if (status == OrderStatus.OUT_FOR_DELIVERY || status == OrderStatus.DELIVERED || status == OrderStatus.CANCELLED) {
 
-            throw new IllegalStateException(
-                    "This order cannot be cancelled"
-            );
+            throw new IllegalArgumentException("This order cannot be cancelled");
+        }else{
+            status = OrderStatus.CANCELLED;
         }
 
-        status = OrderStatus.CANCELLED;
+
     }
 
     public void paymentStatus(PaymentStatus paymentStatus) {
@@ -78,9 +78,7 @@ public class Order {
                     status = OrderStatus.DELIVERED;
 
             default ->
-                    throw new IllegalStateException(
-                            "This order cannot move to the next status"
-                    );
+                    throw new IllegalStateException("This order cannot move to the next status");
         }
     }
 
