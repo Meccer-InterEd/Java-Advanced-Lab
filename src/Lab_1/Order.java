@@ -1,10 +1,12 @@
 package Lab_1;
 
 
+import java.math.BigDecimal;
+
 public class Order {
     private String orderNumber;
     private String CustomerName;
-    private double totalAmount;
+    private BigDecimal totalAmount;
 
     private OrderStatus orderStatus;
     private PaymentStatus paymentStatus;
@@ -12,7 +14,7 @@ public class Order {
 
 
     public Order(String orderNumber, String CustomerName,
-                 double totalAmount, DeliveryMethod deliveryMethod) {
+                 BigDecimal totalAmount, DeliveryMethod deliveryMethod) {
 
         this.orderNumber = orderNumber;
         this.CustomerName = CustomerName;

@@ -1,5 +1,7 @@
 package Lab_1;
 
+import java.math.BigDecimal;
+
 public class OrderMain {
 
     public void main () {
@@ -7,7 +9,7 @@ public class OrderMain {
         Order order1 = new Order(
                 "ORD-1001",
                 "Lerato",
-                249.99,
+                new BigDecimal ("249.99"),
                 DeliveryMethod.STANDARD_DELIVERY
         );
 
