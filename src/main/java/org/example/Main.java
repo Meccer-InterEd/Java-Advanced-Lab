@@ -3,6 +3,8 @@ package org.example;
 
 
 
+import org.example.Interface_Payment_System.InstantEftPayment;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -43,7 +45,9 @@ public class Main {
                     menu.DisplayFoodDelivery();
                     break;
                 case 2:
-                    System.out.println("Comming Soon");
+//                    System.out.println("Comming Soon");
+                    menu.DisplayPayment();
+
                     break;
                 case 3:
                     System.out.println("Comming Soon");

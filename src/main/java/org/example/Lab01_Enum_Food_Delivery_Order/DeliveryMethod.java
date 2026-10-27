@@ -1,4 +1,4 @@
-package org.example.Lab01_Food_Delivery_Order;
+package org.example.Lab01_Enum_Food_Delivery_Order;
 
 public enum DeliveryMethod {
     COLLECTION,

@@ -1,18 +1,21 @@
 package org.example;
 
-import org.example.Lab01_Food_Delivery_Order.DeliveryMethod;
-import org.example.Lab01_Food_Delivery_Order.Order;
-import org.example.Lab01_Food_Delivery_Order.PaymentStatus;
+import org.example.Interface_Payment_System.*;
+import org.example.Lab01_Enum_Food_Delivery_Order.DeliveryMethod;
+import org.example.Lab01_Enum_Food_Delivery_Order.Order;
+import org.example.Lab01_Enum_Food_Delivery_Order.PaymentStatus;
 
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Scanner;
+import java.util.function.DoubleToIntFunction;
 
 public class DisplayMethod {
+    Scanner scanner = new Scanner(System.in);
 
-    public void DisplayFoodDelivery(){
-        Scanner scanner = new Scanner(System.in);
-        Menu menu = new Menu();
+    //Menu menu = new Menu();
+    public void DisplayFoodDelivery() {
+
         Order order = new Order(
                 "ORD-1001",
                 "Lerato",
@@ -77,5 +80,8 @@ public class DisplayMethod {
         }
 
         scanner.close();
+    }
+
+    public void DisplayPayment() {
     }
 }
