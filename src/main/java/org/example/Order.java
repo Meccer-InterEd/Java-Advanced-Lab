@@ -74,26 +74,21 @@ public class Order {
         }
     }
 
-    void confirmOrder(PaymentStatus status){
+    double subtotal = totalAmount + calculateDelivery();
 
-        if(status == PaymentStatus.PENDING){
-            orderStatus = OrderStatus.PLACED;
-            System.out.println("Order has been placed. Proceeding to payment.");
-        }
-        else if(status == PaymentStatus.PAID){
-            orderStatus = OrderStatus.CONFIRMED;
-            System.out.println("Order confirmed!");
+    void confirmOrder(double amount){
 
+        if(amount >= subtotal){
+            this.paymentStatus = PaymentStatus.PAID;
+            this.orderStatus = OrderStatus.CONFIRMED;
+            System.out.println("Payment successful!");
+            System.out.println("Order " + this.orderNumber + " is confirmed");
         }
-        else if(status == PaymentStatus.FAILED){
-            orderStatus = OrderStatus.CANCELLED;
-            System.out.println("Payment has failed. Order Cancelled!");
+        else{
+            this.paymentStatus = PaymentStatus.FAILED;
+            this.orderStatus = OrderStatus.PLACED;
+            System.out.println("Insufficient funds.");
         }
-        else if(status == PaymentStatus.REFUNDED){
-            orderStatus = OrderStatus.CANCELLED;
-            System.out.println("Money refunded, place another order");
-        }
-
     }
 
     void cancelOrder(){
@@ -107,7 +102,7 @@ public class Order {
         System.out.println("Order " + this.orderNumber + " has been canceled!");
     }
 
-    void calculateDelivery(){
+    double calculateDelivery(){
         double deliveryAmt = 0;
 
         switch(deliveryMethod){
@@ -117,7 +112,12 @@ public class Order {
             default:
                 System.out.println("Invalid Option"); break;
         }
+        return deliveryAmt;
     }
+
+
+
+
 
     void display(){
 
