@@ -21,5 +21,11 @@ public class Main {
             System.out.println();
         }
 
+        CheckoutService service = new CheckoutService();
+        service.checkout(150.50, new CardPayment());
+        service.checkout(200.00, new InstantEftPayment());
+        service.checkout(50.00, new VoucherPayment());
+
+
     }
 }
