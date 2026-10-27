@@ -9,7 +9,7 @@ public class CardPayment implements PaymentMethod {
      String cardNumber;
      String cardHolderName;
      BigDecimal balance;
-    private String displayName;
+     private String displayName;
 
 
     public CardPayment(String cardNumber, String cardHolderName, BigDecimal balance) {
@@ -23,6 +23,14 @@ public class CardPayment implements PaymentMethod {
     }
     @Override
     public PaymentResult pay(BigDecimal amount) {
+        if (amount.compareTo(balance) == 0) {
+            System.out.println("Purchase was successful");
+            boolean successful = true;
+        } else {
+            System.out.println("Payment failed");
+            boolean successful = false;
+        }
         return null;
+
     }
 }
