@@ -170,7 +170,7 @@ public class Order {
         System.out.printf("Total Amount is: R%.2f\n", getTotalAmount());
         System.out.printf("Delivery fee is: R%.2f\n", deliveryFee);
         System.out.printf("Grand Total Amount: R%.2f\n", (getTotalAmount() + deliveryFee));
-        System.out.println("Initial Order Status is: " + getCurrentStatus());
-        System.out.println("Current Order Status: " + getOrderStatus());
+        System.out.println("Current Order Status: " + getCurrentStatus());
+        System.out.println("Proceeding Order Status: " + getOrderStatus());
     }
 }
