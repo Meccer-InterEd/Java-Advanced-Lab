@@ -131,14 +131,13 @@ public class Order extends Thread{
 
     void changeStatus(Order order) throws InterruptedException{
         Scanner sc = new Scanner(System.in);
-        String orderJourney = "preparing";
         String option = "";
 
         //get current order status
         OrderStatus status = order.getStatus();
 
         //loop through while preparing order
-        while(orderJourney.equalsIgnoreCase("preparing"))
+        while(order.orderStatus != OrderStatus.CANCELLED)
         { switch (status){
             case CONFIRMED -> {
                 System.out.println("Chef Preparing: ");
@@ -148,7 +147,7 @@ public class Order extends Thread{
                 if(option.equalsIgnoreCase("no")){
                     order.setOrderStatus(OrderStatus.PREPARING);
                     displayOrder(order);
-                    Thread.sleep(5000);
+                   // Thread.sleep(2000);
 
                 } else if(option.equalsIgnoreCase("yes")){
                     orderStatus = OrderStatus.CANCELLED;
@@ -167,7 +166,7 @@ public class Order extends Thread{
                 option = sc.nextLine();
 
                 if(option.equalsIgnoreCase("no")){
-                    Thread.sleep(5000);
+                   // Thread.sleep(2000);
                     order.setOrderStatus(OrderStatus.READY_FOR_COLLECTION);
                     displayOrder(order);
 
@@ -189,7 +188,7 @@ public class Order extends Thread{
                 option = sc.nextLine();
 
                 if(option.equalsIgnoreCase("no")){
-                    Thread.sleep(5000);
+                    //Thread.sleep(2000);
                     order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
                     displayOrder(order);
 
@@ -201,13 +200,26 @@ public class Order extends Thread{
                 }
 
                 status = OrderStatus.OUT_FOR_DELIVERY;
-                orderJourney = "Done";
+
 
             }
             case OUT_FOR_DELIVERY -> {
                 displayOrder(order);
 
+               // order.setOrderStatus(OrderStatus.CANCELLED);
+                status = OrderStatus.DELIVERED;
+                order.setOrderStatus(OrderStatus.DELIVERED);
+                break;
+
             }
+            case DELIVERED ->{
+                displayOrder(order);
+                status = OrderStatus.CANCELLED;
+                order.setOrderStatus(OrderStatus.CANCELLED);
+                break;
+            }
+            default -> {}
+
         }
         }
     }
@@ -234,7 +246,10 @@ public class Order extends Thread{
                     "\nStatus: " + order.getStatus() +
                     "\nPrice: " + grandTotal.add(deliveryFee(order)) +
                     ("\nDelivery fee: " + deliveryFee(order)));
-        }else{
+
+        }else if(order.getStatus() == OrderStatus.DELIVERED){
+            System.out.println("Rate Order: ");}
+        else{
             System.out.println("Order Cancelled");
         }
     }
