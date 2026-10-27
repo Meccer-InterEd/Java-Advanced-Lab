@@ -15,7 +15,7 @@ public class Order {
     private DeliveryMethod deliveryMethod;
     private BigDecimal finalAmount;
     private BigDecimal deliveryFee;
-    private boolean didUserCancel;
+    private boolean isOrderCanceled;
 
     public Order(String order_number, String customer_name, BigDecimal total_amount, DeliveryMethod
                  delivery_method) throws InterruptedException {
@@ -30,7 +30,7 @@ public class Order {
         deliveryMethod = delivery_method;
         orderStatus = OrderStatus.PLACED;
         paymentStatus = PaymentStatus.PENDING;
-        didUserCancel = false;
+        isOrderCanceled = false;
     }
 
     public void Pay(BigDecimal amount) throws InterruptedException {
@@ -55,9 +55,9 @@ public class Order {
 
         } else if (orderStatus == OrderStatus.OUT_FOR_DELIVERY || orderStatus == OrderStatus.DELIVERED){
             System.out.println("\nOrder cannot be cancelled at this moment! As it is out for delivery / has been delivered.");
+        } else {
+            orderCancelled("\n"+customerName+" has cancelled their order!!!",orderNumber);
         }
-        orderCancelled("\n"+customerName+" has cancelled their order!!!",orderNumber);
-        didUserCancel = true;
     }
 
     private void orderSummary(){
@@ -74,52 +74,60 @@ public class Order {
         System.out.println("--------------------------------------");
     }
 
-    private void paymentPaid(String message){
+    private void paymentPaid(String message) throws InterruptedException {
         paymentStatus = PaymentStatus.PAID;
         System.out.println(message);
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void paymentFailed(String message){
+    private void paymentFailed(String message) throws InterruptedException {
         paymentStatus = PaymentStatus.FAILED;
         System.out.println(message);
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void orderConfirmed(String message, String orderNum){
+    private void orderConfirmed(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.CONFIRMED;
         System.out.println(message+" : Alert for order number "+orderNum);
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void orderPreparing(String message, String orderNum){
+    private void orderPreparing(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.PREPARING;
         System.out.println(message+" : Alert for order number "+orderNum);
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void orderCancelled(String message, String orderNum){
+    private void orderCancelled(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.CANCELLED;
+        isOrderCanceled = true;
         System.out.println(message+" : Alert for order number "+orderNum);
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void orderReadyForCollection(String message, String orderNum){
+    private void orderReadyForCollection(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.READY_FOR_COLLECTION;
         System.out.println(message+" : Alert for order number "+orderNum+"\n\n");
         orderSummary();
+        delayExecution(5000);
     }
 
-    private void orderOutForDelivery(String message, String orderNum){
+    private void orderOutForDelivery(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.OUT_FOR_DELIVERY;
         System.out.println(message+" : Alert for order number "+orderNum);
         orderSummary();
     }
 
-    private void orderDelivered(String message, String orderNum){
+    private void orderDelivered(String message, String orderNum) throws InterruptedException {
         orderStatus = OrderStatus.DELIVERED;
         System.out.println(message+" : Alert for order number "+orderNum);
         orderSummary();
+        delayExecution(5000);
     }
 
     private void delayExecution(int milliseconds) throws InterruptedException {
@@ -127,7 +135,7 @@ public class Order {
     }
 
     public void orderProgress() throws InterruptedException {
-        if (!didUserCancel){
+        if (!isOrderCanceled){
             if (deliveryMethod == DeliveryMethod.COLLECTION){
                 delayExecution(7000);
                 orderReadyForCollection("\nThe order is ready for collection",orderNumber);
