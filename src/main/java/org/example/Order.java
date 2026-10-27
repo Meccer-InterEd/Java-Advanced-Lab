@@ -1,5 +1,7 @@
 package org.example;
 
+import static org.example.DeliveryMethod.*;
+
 public class Order {
     private String order_Number;
     private String customerName;
@@ -8,13 +10,13 @@ public class Order {
     private DeliveryMethod deliveryMethod;
     private OrderStatus orderStatus;
 
-    public Order(String order_Number, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod) {
+    public Order(String order_Number, String customerName, double totalAmount, PaymentStatus status, DeliveryMethod deliveryMethod, OrderStatus orderStatus) {
         setOrder_Number(order_Number);
         setCustomerName(customerName);
         setTotalAmount(totalAmount);
         setStatus(status);
         setDeliveryMethod(deliveryMethod);
-        this.orderStatus = OrderStatus.PLACED;
+        this.orderStatus = orderStatus;
     }
 
     public String getOrder_Number() {
@@ -46,7 +48,7 @@ public class Order {
     }
 
     public void setTotalAmount(double totalAmount) {
-        if (totalAmount > 0 ) {
+        if (totalAmount > 0) {
             this.totalAmount = totalAmount;
         } else {
             throw new IllegalArgumentException("Invalid amount: R" + totalAmount);
@@ -76,14 +78,15 @@ public class Order {
             throw new IllegalArgumentException("Delivery method cannot be empty");
         }
     }
+
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
     public void nextStatus(OrderStatus targetStatus) {
         switch (this.orderStatus) {
-            case PLACED:
-                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
+            case IN_PROGRESS:
+                if (targetStatus == OrderStatus.PLACED || targetStatus == OrderStatus.CANCELLED) {
                     this.orderStatus = targetStatus;
                     return;
                 }
@@ -94,16 +97,25 @@ public class Order {
                     return;
                 }
                 break;
+            case PLACED:
+                if (targetStatus == OrderStatus.CONFIRMED || targetStatus == OrderStatus.CANCELLED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
             case PREPARING:
-                if (targetStatus == OrderStatus.IN_PROGRESS ||
-                        targetStatus == OrderStatus.READY_FOR_COLLECTION ||
+                if (targetStatus == OrderStatus.READY_FOR_COLLECTION ||
                         targetStatus == OrderStatus.OUT_FOR_DELIVERY) {
                     this.orderStatus = targetStatus;
                     return;
                 }
                 break;
-            case IN_PROGRESS:
             case READY_FOR_COLLECTION:
+                if (targetStatus == OrderStatus.COLLECTED) {
+                    this.orderStatus = targetStatus;
+                    return;
+                }
+                break;
             case OUT_FOR_DELIVERY:
                 if (targetStatus == OrderStatus.DELIVERED) {
                     this.orderStatus = targetStatus;
@@ -121,5 +133,34 @@ public class Order {
                 break;
         }
         throw new IllegalStateException("Invalid order move: Cannot change from " + this.orderStatus + " to " + targetStatus);
+    }
+
+    void assignStatus() {
+        if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.CONFIRMED) {
+            this.nextStatus(OrderStatus.PREPARING);
+        } else if (this.status == PaymentStatus.FAILED) {
+            this.nextStatus(OrderStatus.CANCELLED);
+        } else if (this.status == PaymentStatus.PENDING && this.orderStatus == OrderStatus.IN_PROGRESS) {
+            this.nextStatus(OrderStatus.PLACED);
+        } else if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.READY_FOR_COLLECTION) {
+            this.nextStatus(OrderStatus.COLLECTED);
+        }else if (this.status == PaymentStatus.PAID && this.orderStatus == OrderStatus.OUT_FOR_DELIVERY) {
+            this.nextStatus(OrderStatus.DELIVERED);
+        } else {
+            throw new IllegalArgumentException("Invalid Payment Status Match");
+        }
+
+        double deliveryFee = switch (getDeliveryMethod()) {
+            case EXPRESS_DELIVERY -> 65.00;
+            case STANDARD_DELIVERY -> 35.00;
+            case COLLECTION -> 0.0;
+        };
+
+
+        System.out.println("Customer Name: " + getCustomerName());
+        System.out.printf("Total Amount is: R%.2f\n", getTotalAmount());
+        System.out.printf("Delivery fee is: R%.2f\n", deliveryFee);
+        System.out.printf("Grand Total Amount: R%.2f\n", (getTotalAmount() + deliveryFee));
+        System.out.println("Order status: " + getOrderStatus());
     }
 }
