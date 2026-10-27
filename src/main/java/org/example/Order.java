@@ -13,7 +13,8 @@ public class Order {
     private DeliveryMethod deliveryMethod;
     private BigDecimal amountPaid;
 
-    public Order(String _orderNumber, String _customerName, BigDecimal _totalAmount, BigDecimal amountPaid, DeliveryMethod _deliveryMethod) {
+    public Order(String _orderNumber, String _customerName, BigDecimal _totalAmount,
+                 BigDecimal amountPaid, DeliveryMethod _deliveryMethod) {
         this.orderNumber = _orderNumber;
         this.customerName = _customerName;
         this.totalAmount = _totalAmount;
@@ -78,5 +79,10 @@ public class Order {
         System.out.println("Customer Name: " + customerName);
         System.out.println("Total Amount: " + "R" + totalAmount);
     }
+
+//Challenge
+//Add a nextStatus() method that permits only explicitly allowed transitions.
+//Do not rely on enum declaration order to decide what comes next.
+
 
 }
