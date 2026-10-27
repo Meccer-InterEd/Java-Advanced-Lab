@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Lab01_Food_Delivery_Order;
 
 import java.math.BigDecimal;
 
@@ -11,7 +11,7 @@ public class Order {
     OrderStatus status;
 
     // added the contructor
-    Order(String customerName, String orderNumber, BigDecimal totalAmount, DeliveryMethod deliveryMethod) {
+    public Order(String customerName, String orderNumber, BigDecimal totalAmount, DeliveryMethod deliveryMethod) {
         this.orderNumber = orderNumber;
         this.customerName = customerName;
         this.totalAmount = totalAmount;
@@ -97,6 +97,7 @@ public class Order {
 
 
     public BigDecimal calculateTotalAmount() {
+
         return totalAmount.add(calculateFreeDelivery());
     }
 
