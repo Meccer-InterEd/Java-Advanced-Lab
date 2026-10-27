@@ -1,35 +1,31 @@
 package org.example.FoodDeliveryOrder;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
-public class Order {
-  private int orderNumber;
-  private String customerName;
-  private double totalAmount;
-  private OrderStatus status;
-  private PaymentStatus paymentStatus;
-  private DeliveryMethod deliveryMethod;
+public class Order extends Thread{
+    private String orderNumber;
+    private String customerName;
+    private BigDecimal totalAmount;
+    private OrderStatus orderStatus;
+    private PaymentStatus paymentStatus;
+    private DeliveryMethod deliveryMethod;
 
     Order(){
 
     }
 
-    Order(String customerName, int orderNumber, double totalAmount, DeliveryMethod deliveryMethod){
-        this.customerName = customerName;
-        this.orderNumber = orderNumber;
-        this.totalAmount = totalAmount;
-        this.deliveryMethod = deliveryMethod;
+    Order(String orderNumber, String customerName, BigDecimal totalAmount, DeliveryMethod deliveryMethod){
 
-    }
 
-    Order(int orderNumber, String customerName, double totalAmount, OrderStatus status, PaymentStatus paymentStatus, DeliveryMethod deliveryMethod ){
         this.orderNumber = orderNumber;
         this.customerName = customerName;
-        this.totalAmount = totalAmount;
-        this.status = status;
-        this.paymentStatus = paymentStatus;
         this.deliveryMethod = deliveryMethod;
+        this.totalAmount = totalAmount;
 
+        //Default order status and payment status when order is created through this constructor
+        this.paymentStatus = PaymentStatus.PENDING;
+        this.orderStatus = OrderStatus.PLACED;
     }
 
     //Getters
@@ -37,16 +33,16 @@ public class Order {
         return deliveryMethod;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public int getOrderNumber() {
-        return orderNumber;
+    public String getOrderNumber() {
+        return orderNumber ;
     }
 
     public OrderStatus getStatus() {
-        return status;
+        return orderStatus;
     }
 
     public PaymentStatus getPaymentStatus() {
@@ -56,6 +52,7 @@ public class Order {
     public String getCustomerName() {
         return customerName;
     }
+
 
     //Setters
 
@@ -67,139 +64,179 @@ public class Order {
         this.deliveryMethod = deliveryMethod;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    BigDecimal deliveryFee(Order order){
+        DeliveryMethod d = DeliveryMethod.COLLECTION;
+        switch(d){
+            case STANDARD_DELIVERY -> {return new BigDecimal("35.00");}
+            case EXPRESS_DELIVERY -> {return new BigDecimal("65.00");}
+            default -> {return new BigDecimal("0.00");}
+        }
     }
+    //synchronized method that waits for payment Thread to complete then updates payment status and order is then  confirmed
+    synchronized void confirmOrder(Order order) throws InterruptedException {
+        while(order.paymentStatus != PaymentStatus.PAID){
+            System.out.println("Pending Payment.....");
+            this.wait();
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
+        }
 
-    void confirmOrder(double amount, Order order) {
-        if(amount < getTotalAmount()){
-          //  order.setStatus(OrderStatus.PLACED);
-            order.setPaymentStatus(PaymentStatus.PENDING);
-
-            System.out.println("Amount entered lower than required order amount");
-        }else if( amount > getTotalAmount()){
-            order.setPaymentStatus(PaymentStatus.PAID);
-            System.out.println("Order Confirmed");
-            order.setStatus(OrderStatus.CONFIRMED);
-
+        if(order.paymentStatus == PaymentStatus.PAID){
+            System.out.println("Order Confirmed...");
+            order.orderStatus = OrderStatus.CONFIRMED;
+            System.out.println("Order Status: " + orderStatus);
+        }else{
+            System.out.println("Payment was not sucessful");
         }
     }
 
+    synchronized boolean makePayment(BigDecimal amountToPay){
 
-   /* void moveStatus(Order order){
+        //check if amount given is enough to pay for order amount if so it continues to confirm order method
+        if(amountToPay.compareTo(this.totalAmount) < 0){
+
+            System.out.println("Amount less than required amount for order");
+            System.out.println("Enter new Amount");
+            this.paymentStatus = PaymentStatus.FAILED;
+            this.notifyAll();
+
+            //returns false for unsuccessful payment
+            return false;
+
+        }else{
+            System.out.println("Payment successful");
+
+            this.paymentStatus = PaymentStatus.PAID;
+            this.notifyAll();
+
+            //returns true for a successful payment and changes payment status to Paid
+            return true;
+        }
+    }
+
+    void changeStatus(Order order) throws InterruptedException{
         Scanner sc = new Scanner(System.in);
-        String stat = "";
+        String orderJourney = "preparing";
+        String option = "";
 
-       if(order.getStatus() == OrderStatus.CONFIRMED){
-           order.setStatus(OrderStatus.PREPARING);
-       }
+        //get current order status
+        OrderStatus status = order.getStatus();
 
-       while(order.getStatus() == OrderStatus.PREPARING){
-           System.out.println("Preparing order");
+        //loop through while preparing order
+        while(orderJourney.equalsIgnoreCase("preparing"))
+        { switch (status){
+            case CONFIRMED -> {
+                System.out.println("Chef Preparing: ");
+                System.out.println("Would you like to cancel order");
+                option = sc.nextLine();
 
-           //Chef to change status when prompted
-           stat = sc.nextLine();
+                if(option.equalsIgnoreCase("no")){
+                    order.setOrderStatus(OrderStatus.PREPARING);
+                    displayOrder(order);
+                    Thread.sleep(5000);
 
-           if(stat.equalsIgnoreCase("done")){
-               order.setStatus(OrderStatus.READY_FOR_COLLECTION);
+                } else if(option.equalsIgnoreCase("yes")){
+                    orderStatus = OrderStatus.CANCELLED;
+                    order.setOrderStatus(OrderStatus.CANCELLED);
+                    displayOrder(order);
+                    break;
+                }
+                //cahnge status
+                status = OrderStatus.PREPARING;
 
-               System.out.println("Order Ready For Collection");
-
-           }else if(stat.equalsIgnoreCase("cancel")){
-
-               order.setStatus(OrderStatus.CANCELLED);
-               System.out.println("Order Cancelled");
-
-       }
-
-
-       while(order.getStatus() == OrderStatus.READY_FOR_COLLECTION){
-           stat = sc.nextLine();
-
-           if(stat.equalsIgnoreCase("fetched")){
-
-               order.setStatus(OrderStatus.OUT_FOR_DELIVERY);
-               System.out.println("Customer Can no longer cancel order");
-
-           }else if(stat.equalsIgnoreCase("cancel")){
-
-               order.setStatus(OrderStatus.CANCELLED);
-               System.out.println("Order cancelled");
-           }
-       }
-
-       while(order.getStatus() == OrderStatus.OUT_FOR_DELIVERY){
-
-           stat = sc.nextLine();
-
-           if(stat.equalsIgnoreCase("delivered")){
-
-                order.setStatus(OrderStatus.DELIVERED);
-               System.out.println("Order delivered");
-           }
-       }*/
-
-        double deliveryFee(DeliveryMethod method){
-            if(method ==  DeliveryMethod.STANDARD_DELIVERY){
-                return 35.00;
-            }else if(method ==  DeliveryMethod.EXPRESS_DELIVERY){
-                return 65.00;
-            }else{
-                return 0.00;
+                break;
             }
-        }
+            case PREPARING -> {
+                System.out.println("Order almost Ready " + "\nWould you like to cancel order");
 
-        double TotalAmount(DeliveryMethod method){
-            double total = 0.00;
+                option = sc.nextLine();
 
-            total = this.totalAmount + deliveryFee(method);
+                if(option.equalsIgnoreCase("no")){
+                    Thread.sleep(5000);
+                    order.setOrderStatus(OrderStatus.READY_FOR_COLLECTION);
+                    displayOrder(order);
 
-            return total;
-        }
+                } else if(option.equalsIgnoreCase("yes")){
+                    orderStatus = OrderStatus.CANCELLED;
+                    order.setOrderStatus(OrderStatus.CANCELLED);
+                    displayOrder(order);
+                    break;
+                }
 
-        void statusChange(OrderStatus status, double amount, Order order){
-            switch(status){
-                case PLACED :
-                    System.out.println("Order Placed Awaiting Payment");
-                    confirmOrder(amount, order);
+                status = OrderStatus.READY_FOR_COLLECTION;
 
-                case CONFIRMED:
-                    System.out.println("Order Confirmed");
-                    order.setStatus(OrderStatus.PREPARING);
+                break;
+            }
+            case READY_FOR_COLLECTION -> {
 
-                case PREPARING:
-                    System.out.println("Preparing order");
-                    order.setStatus(OrderStatus.READY_FOR_COLLECTION);
 
-                case READY_FOR_COLLECTION:
-                    System.out.println("Ready for collection");
-                    order.setStatus(OrderStatus.OUT_FOR_DELIVERY);
+                System.out.println("Would you like to cancel order?");
+                option = sc.nextLine();
 
-                case OUT_FOR_DELIVERY:
-                    System.out.println("Order out for delivery");
-                    order.setStatus(OrderStatus.DELIVERED);
+                if(option.equalsIgnoreCase("no")){
+                    Thread.sleep(5000);
+                    order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+                    displayOrder(order);
 
-                case DELIVERED:
-                    System.out.println("Order has been delivered");
+                } else if(option.equalsIgnoreCase("yes")){
+                    orderStatus = OrderStatus.CANCELLED;
+                    order.setOrderStatus(OrderStatus.CANCELLED);
+                    displayOrder(order);
+                    break;
+                }
 
-               // default: order.setStatus(OrderStatus.CANCELLED);
-                    //System.out.println("Cancelled");
-
+                status = OrderStatus.OUT_FOR_DELIVERY;
+                orderJourney = "Done";
 
             }
+            case OUT_FOR_DELIVERY -> {
+                displayOrder(order);
 
+            }
         }
-       }
+        }
+    }
 
+    void displayOrder(Order order){
+        BigDecimal grandTotal = order.totalAmount;
+        //if still preparing print without price
+        if(order.getStatus() == OrderStatus.CONFIRMED || order.getStatus() == OrderStatus.PREPARING){
+
+            System.out.println("\nOrder NO: " + order.getOrderNumber() +
+                            "\nCustomer Name: " + order.getCustomerName()
+                    //"\nStatus: " + order.getStatus()
+            );
+
+        }else if(order.getStatus() == OrderStatus.READY_FOR_COLLECTION){
+
+            System.out.println("\nOrder NO: " + order.getOrderNumber() +
+                    "\nCustomer Name: " + order.getCustomerName() +
+                    "\nStatus: " + order.getStatus() +
+                    "\nAwaiting Driver");
+        }else if(order.getStatus() == OrderStatus.OUT_FOR_DELIVERY){
+            System.out.println("Order NO: " + order.getOrderNumber() +
+                    "\nCustomer Name: " + order.getCustomerName() +
+                    "\nStatus: " + order.getStatus() +
+                    "\nPrice: " + grandTotal.add(deliveryFee(order)) +
+                    ("\nDelivery fee: " + deliveryFee(order)));
+        }else{
+            System.out.println("Order Cancelled");
+        }
+    }
+
+}
