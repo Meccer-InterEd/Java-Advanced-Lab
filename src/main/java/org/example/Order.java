@@ -11,11 +11,13 @@ public class Order {
     private OrderStatus status;
     private PaymentStatus paymentStatus;
     private DeliveryMethod deliveryMethod;
+    private BigDecimal amountPaid;
 
-    public Order(String _orderNumber, String _customerName, BigDecimal _totalAmount, DeliveryMethod _deliveryMethod) {
+    public Order(String _orderNumber, String _customerName, BigDecimal _totalAmount, BigDecimal amountPaid, DeliveryMethod _deliveryMethod) {
         this.orderNumber = _orderNumber;
         this.customerName = _customerName;
         this.totalAmount = _totalAmount;
+        this.amountPaid = amountPaid;
         status = OrderStatus.PREPARING;
         paymentStatus = PaymentStatus.PENDING;
         this.deliveryMethod = _deliveryMethod;
@@ -26,6 +28,7 @@ public class Order {
     }
     public String getCustomerName() {return customerName;}
     public BigDecimal getTotalAmount() {return totalAmount;}
+    public BigDecimal setAmountPaid() {return amountPaid;}
     public OrderStatus getStatus() {return status;}
 
 //Implement methods to:
@@ -37,18 +40,27 @@ public class Order {
 
 
     public void confirmOrder() {
-        if (status == OrderStatus.CONFIRMED && paymentStatus == PaymentStatus.PAID) {
-            System.out.println("Order has been confirmed");
-        } else  {
-            System.out.println("Order hasn't been confirmed");
+        if (amountPaid == null) {
+            status = OrderStatus.PLACED;
+            paymentStatus = PaymentStatus.PENDING;
+            System.out.println("Your order has been placed.");
+        } else if (amountPaid.compareTo(totalAmount) == 0) {
+            status = OrderStatus.CONFIRMED;
+            paymentStatus = PaymentStatus.PAID;
+            System.out.println("Order has been confirmed." + "\n Your order number is: " + orderNumber);
+        } else {
+            PaymentStatus paymentStatus = PaymentStatus.FAILED;
+            System.out.println("Order not confirmed, Customer has insufficient funds.");
         }
     }
 
     public void cancelOrder() {
-        if (status == OrderStatus.CANCELLED && paymentStatus == PaymentStatus.PAID) {
-            System.out.println("Order has been cancelled");
+        if (status != OrderStatus.OUT_FOR_DELIVERY && status != OrderStatus.READY_FOR_COLLECTION && paymentStatus == PaymentStatus.PAID) {
+            status = OrderStatus.CANCELLED;
+            paymentStatus = PaymentStatus.REFUNDED;
+            System.out.println("Order has been cancelled, cancellation fees will be change and You will be Refunded.");
         }  else {
-            System.out.println("Order is already out for delivery, CAN NOT CANCEL AT THIS STAGE.");
+            System.out.println("Order is already out for delivery and collection, CAN NOT CANCEL AT THIS STAGE.");
         }
     }
 
@@ -67,7 +79,4 @@ public class Order {
         System.out.println("Total Amount: " + "R" + totalAmount);
     }
 
-    public void nextStatus(){
-
-    }
 }

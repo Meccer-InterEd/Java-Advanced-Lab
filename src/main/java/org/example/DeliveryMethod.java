@@ -5,5 +5,4 @@ public enum DeliveryMethod {
     STANDARD_DELIVERY,
     EXPRESS_DELIVERY
 
-
 }
