@@ -33,6 +33,11 @@ public class Main {
         processTransaction(checkoutService, voucher, 200);
 
         processTransaction(checkoutService, voucher, 150);
+
+        System.out.println("\n-LAB 2-----------Challenge-----------------");
+        PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
+        paymentMethodFactory.display();
+
     }
 
     private static void processTransaction (CheckoutService service, PaymentMethod method, double amount){
