@@ -1,35 +1,37 @@
 package org.example;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 public class Booking {
     private String bookingId;
+    private BookingStatus status = BookingStatus.REQUESTED;
+    private CustomerDetails details;
 
-    public void Booking(String bookingId){
-       setBookingId(bookingId);
+    public Booking(String bookingId, CustomerDetails details){
+
+        setBookingId(bookingId);
+        this.details = details;
     }
 
+    public CustomerDetails getDetails(){return details;}
     public String getBookingId(){ return bookingId;}
+
+    public BookingStatus getStatus(){return status;}
 
     public void setBookingId(String bookingId){
         this.bookingId = bookingId;
     }
 
-    // store what is in the CustomerDetails record so that I can use it call the parameters
-    // only methods inside the same class can have access to it
-    private CustomerDetails details;
-
-    void confirmedBooking(BookingStatus booking){
-        if (booking == BookingStatus.CONFIRMED){
-            System.out.println("Your boodking has been cofirmed");
-            System.out.println("Name: " + details.fullName());
-            System.out.println("Email: " + details.email());
-        } else if (booking == BookingStatus.REQUESTED){
-            System.out.println("Your booking has been requestd: ");
-            System.out.println("Pending booking details: ");
-            System.out.println();
+   public void confirmedBooking(){
+        if (status == BookingStatus.CANCELLED){
+            System.out.println("A cancelled booking can not be confirmed");
         } else {
-            System.out.println("Your booking has been cancelled");
+            status = BookingStatus.CONFIRMED;
+            System.out.println("Your booking has been confirmed");
         }
     }
+
+    public void canceledBooking(){
+       status = BookingStatus.CANCELLED;
+        System.out.println("Your booking has been cancelled");
+    }
+
 }

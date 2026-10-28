@@ -12,7 +12,7 @@ public class CheckoutService {
         System.out.println("Reference: " + result.reference());
         System.out.println("Message: " + result.message());
         System.out.println("---------------------------------------------------------------");
-        return payment.pay(amount);
+        return null;
 
     }
 

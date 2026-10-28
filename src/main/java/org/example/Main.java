@@ -8,6 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        System.out.println("LAB 1");
         Order order = new Order("0000000001", "Siyabonga", 180.22, PAID, COLLECTION, READY_FOR_COLLECTION);
         Order order1 = new Order("0000000002", "Makwa", 250.22, PENDING, STANDARD_DELIVERY, PLACED);
         Order order2 = new Order("0000000003", "Lorna", 5.22, FAILED, EXPRESS_DELIVERY, PLACED);
@@ -21,10 +22,58 @@ public class Main {
             System.out.println();
         }
 
+        System.out.println("LAB 2");
         CheckoutService service = new CheckoutService();
         service.checkout(150.50, new CardPayment());
         service.checkout(200.00, new InstantEftPayment());
         service.checkout(50.00, new VoucherPayment());
+
+        System.out.println("LAB 3");
+        // creating objects of the class
+        CustomerDetails c1 = new CustomerDetails("Siyabonga Ngobeni", "siyabonangobz@gmail.com", "0763452891");
+        CustomerDetails c2 = new CustomerDetails("Lona Hans", "lonahans123@hotmail.com", "0822341069");
+        CustomerDetails c3 = new CustomerDetails("Hishaam Kraft", "krafthishaam@yahoo.com", "0666783561");
+
+        Booking b1 = new Booking("B001", c1);
+        Booking b2 = new Booking("B002", c2);
+        Booking b3 = new Booking("B003", c3);
+        b1.confirmedBooking();
+        b2.canceledBooking();
+        b2.confirmedBooking(); // this will cause an error since the b2 has already been cancelled, it can not be confirmed after
+
+
+
+        Booking[] bookings = {b1, b2, b3};
+        int confirmed = 0;
+        int requested = 0;
+        int cancelled = 0;
+
+        System.out.println("---DAILY BOOKING REPORT---");
+        for(Booking b : bookings){
+            // create an object for the BookingSummary record
+            System.out.println("Booking Id: " + b.getBookingId());
+            System.out.println("Booking Status: " + b.getStatus());
+            System.out.println("Customer Details: ");
+            System.out.println(b.getDetails().fullName());
+            System.out.println(b.getDetails().email());
+            System.out.println(b.getDetails().phoneNumber());
+            System.out.println();
+
+            if(b.getStatus() == BookingStatus.REQUESTED){
+                requested ++;
+            } else if(b.getStatus() == BookingStatus.CONFIRMED){
+                confirmed ++;
+            } else {
+                cancelled ++;
+            }
+        }
+
+        System.out.println("Number of requested booking: " + requested);
+        System.out.println("Number of confirmed booking: " + confirmed);
+        System.out.println("Number of cancelled bookings: " + cancelled);
+
+
+
 
 
     }
