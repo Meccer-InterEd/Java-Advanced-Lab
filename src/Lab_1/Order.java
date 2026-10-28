@@ -43,12 +43,24 @@ public class Order {
         if (orderStatus == OrderStatus.CONFIRMED) {
             orderStatus = OrderStatus.PREPARING;
         }
-                    else {
+        else {
             System.out.println("Order must be confirmed");
         }
-
     }
 
+        public void Collection() {
+              if (orderStatus == OrderStatus.PREPARING) {
+                  orderStatus = OrderStatus.READY_FOR_COLLECTION;
+              }
+          }
+
+          if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
+           deliveryMethod == DeliveryMethod.COLLECTION){
+           orderStatus = OrderStatus.DELIVERED;
+    }
+ else if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
+      deliveryMethod == DeliveryMethod.STANDARD_DELIVERY)
+      orderStatus = OrderStatus.OUT_FOR_DELIVERY)
 
 
     public void details() {
