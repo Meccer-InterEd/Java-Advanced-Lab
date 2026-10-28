@@ -6,7 +6,9 @@ public class CheckoutService {
     public PaymentResult checkout(
             PaymentMethod paymentMethod,
             BigDecimal amount) {
-
-        throw new UnsupportedOperationException("Implement this");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Invalid amount");
+        }
+        return paymentMethod.pay(amount);
     }
 }
