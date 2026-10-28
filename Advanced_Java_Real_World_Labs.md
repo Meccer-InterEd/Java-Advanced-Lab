@@ -153,6 +153,8 @@ public class CheckoutService {
 }
 ```
 
+/*  */
+
 ## Questions
 
 - Why is `PaymentMethod` an interface?

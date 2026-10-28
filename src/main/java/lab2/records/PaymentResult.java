@@ -9,5 +9,4 @@ public record PaymentResult(boolean succesful, String reference, String message)
         }
     }
 
-
 }

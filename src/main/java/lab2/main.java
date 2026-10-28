@@ -14,8 +14,6 @@ public class main
         cs.checkout(pr,500);
         PaymentMethod pr2 = new CardPayment("40585885858585");
         cs.checkout(pr2,500);
-
-
     }
 
 }
