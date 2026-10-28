@@ -1,4 +1,4 @@
-package org.example.Interface_Payment_System;
+package org.example.Lab02_Interface_Payment_System;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
