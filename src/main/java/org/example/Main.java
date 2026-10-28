@@ -1,5 +1,9 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
+
 import static org.example.DeliveryMethod.*;
 import static org.example.OrderStatus.*;
 import static org.example.PaymentStatus.*;
@@ -37,6 +41,8 @@ public class Main {
         System.out.println("\n-LAB 2-----------Challenge-----------------");
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
         paymentMethodFactory.display();
+
+//        CourtBookingRequest courtBookingRequest = new CourtBookingRequest("CUS_001", 141, LocalDate.now(), LocalTime.from();
 
     }
 
