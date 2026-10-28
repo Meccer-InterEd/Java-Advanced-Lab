@@ -47,7 +47,8 @@ public class Main {
 
                     break;
                 case 3:
-                    System.out.println("Comming Soon");
+                    menu.DisplayBooking();
+
                     break;
                 case 4:
                     System.out.println("Comming Soon");

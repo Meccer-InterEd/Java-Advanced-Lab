@@ -1,11 +1,14 @@
 package org.example.Lap03_Records_BookingSystem;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Booking {
    private final String BookingId;
    private final CourtBookingRequest request;
     private BookingStatus status;
 
-    public Booking(String bookingId, CourtBookingRequest request, BookingStatus status) {
+    public Booking(String bookingId, BookingStatus status, CourtBookingRequest request) {
         this.BookingId = bookingId;
         this.request = request;
         this.status = status;
@@ -36,4 +39,6 @@ public class Booking {
         status = BookingStatus.CANCELLED;
         return " Booking is concelled sucessfully";
      }
-}
+
+
+    }

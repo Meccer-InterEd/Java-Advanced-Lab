@@ -15,6 +15,7 @@ public class validateCoustomerDetails {
         if (customer.phoneNumber() == null || customer.phoneNumber().isBlank()) {
             return "Phone number cannot be empty.";
         }
-        return "enter  vaild details";
+
+        return "VALID";
     }
 }

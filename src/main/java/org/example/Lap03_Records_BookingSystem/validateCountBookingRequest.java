@@ -10,7 +10,6 @@ public class validateCountBookingRequest {
         }
         if (request.customerId() == null) {
             return "Customer Id are required";
-
         }
         if (request.countNumber() < 1) {
             return " Count number can not be less than 1";
@@ -28,6 +27,6 @@ public class validateCountBookingRequest {
         if (request.bookingDate().isBefore(LocalDate.now()) && request.startTime().isBefore(LocalTime.now())) {
             return "You cannot use the passed date and time";
         }
-        return " booking request is required";
+        return "VALID";
     }
 }

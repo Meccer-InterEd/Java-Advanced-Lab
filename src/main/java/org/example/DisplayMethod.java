@@ -4,8 +4,11 @@ import org.example.Lab02_Interface_Payment_System.*;
 import org.example.Lab01_Enum_Food_Delivery_Order.DeliveryMethod;
 import org.example.Lab01_Enum_Food_Delivery_Order.Order;
 import org.example.Lab01_Enum_Food_Delivery_Order.PaymentStatus;
+import org.example.Lap03_Records_BookingSystem.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class DisplayMethod {
@@ -151,7 +154,7 @@ public class DisplayMethod {
                 System.out.println("============ PAYMENT RECEIPT ===========");
                 System.out.println("Payment Method: " + paymentMethod.getDisplayName());
                 System.out.println("Transaction Reference: " + result.reference());
-                System.out.println("Payment Status: "+ (result.successful() ? "SUCCESS" : "FAILED")
+                System.out.println("Payment Status: " + (result.successful() ? "SUCCESS" : "FAILED")
                 );
                 System.out.println("Message: " + result.message());
 
@@ -162,5 +165,137 @@ public class DisplayMethod {
         }
     }
 
-}
+    public void DisplayBooking() {
+        boolean running = true;
 
+        while (running) {
+            System.out.println("\n===== COURT BOOKING SYSTEM =====");
+            System.out.println("1. Create new booking");
+            System.out.println("2. Exit");
+            System.out.print("Select your choice: ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1" -> createNewBooking();
+                case "2" -> {
+                    running = false;
+                    System.out.println("Thank you for using the Booking system.");
+                }
+                default -> System.out.println("Invalid option. Choose 1 or 2.");
+            }
+        }
+    }
+
+    private void createNewBooking() {
+        String continueBooking;
+        do {
+            System.out.println("========= CREATE NEW BOOKING ==========");
+
+            System.out.print("Enter full name: ");
+            String fullName = scanner.nextLine().trim();
+
+            System.out.print("Enter email: ");
+            String email = scanner.nextLine().trim();
+
+            System.out.print("Enter phone number: ");
+            String phone = scanner.nextLine().trim();
+
+            CustomerDetails bookingName = new CustomerDetails(fullName, email, phone);
+            validateCoustomerDetails validCustomer = new validateCoustomerDetails();
+            String customerResult = validCustomer.validate(bookingName);
+
+            if (!customerResult.equals("VALID")) {
+                System.out.println("ERROR OCCER: " + customerResult);
+            }
+            else {
+
+                System.out.println("Customer details accepted.");
+
+                System.out.print("Enter customer ID: ");
+                String customerId = scanner.nextLine().trim();
+
+                System.out.print("Enter court number: ");
+                int courtNumber = readPositiveInteger();
+
+                System.out.print("Enter booking duration in minutes: ");
+                int duration = readPositiveInteger();
+
+                CourtBookingRequest count = new CourtBookingRequest(
+                        customerId,
+                        courtNumber,
+                        LocalDate.now(),
+                        LocalTime.of(14, 0),
+                        duration
+                );
+
+                validateCountBookingRequest req = new validateCountBookingRequest();
+
+                String requestResult = req.validate(count);
+
+                if (!requestResult.equals("VALID")) {
+                    System.out.println("ERROR: " + requestResult);
+                }
+                else {
+
+                    String bookingId = "BOOK-" + (1000 + (int)(Math.random() * 9000)); // simple random ID
+                    Booking booking = new Booking(bookingId, BookingStatus.REQUESTED, count);
+
+                    System.out.println("Booking ID: " + booking.getBookingId()
+                    );
+
+                    System.out.println("Initial status: " + booking.getStatus()
+                    );
+                    System.out.println(booking.ConfirmingBooking());
+
+                    System.out.println("Current status: " + booking.getStatus()
+                    );
+
+                    BookingSummary summary = new BookingSummary(
+                            booking.getBookingId(),
+                            bookingName.fullName(),
+                            count.countNumber(),
+                            count.bookingDate(),
+                            count.startTime(),
+                            count.durationMinutes(),
+                            booking.getStatus()
+                    );
+
+                    System.out.println("\n===== DAILY BOOKING SUMMARY =====");
+                    System.out.println("Booking ID: " + summary.bookingId());
+                    System.out.println("Customer: " + summary.customerName());
+                    System.out.println("Court: " + summary.courtNumber());
+                    System.out.println("Date: " + summary.bookingDate());
+                    System.out.println("Start time: " + summary.startTime());
+                    System.out.println(
+                            "Duration: " + summary.durationMinutes() + " minutes"
+                    );
+                    System.out.println("Status: " + summary.status());
+                }
+            }
+
+            System.out.print("\nCreate another booking? (y/n): ");
+            continueBooking = scanner.nextLine().trim();
+
+        } while (continueBooking.equalsIgnoreCase("y"));
+
+        System.out.println("Booking process finished.");
+    }
+    private int readPositiveInteger() {
+
+        while (true) {
+            String input = scanner.nextLine().trim();
+            try {
+                int number = Integer.parseInt(input);
+
+                if (number > 0) {
+                    return number;
+                }
+                System.out.print("Enter a number greater than zero: ");
+
+            } catch (NumberFormatException e) {
+                System.out.print("Invalid input. Enter a whole number: ");
+            }
+        }
+    }
+}
