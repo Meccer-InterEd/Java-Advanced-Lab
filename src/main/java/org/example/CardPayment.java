@@ -17,10 +17,10 @@ public class CardPayment implements PaymentMethod{
     public PaymentResult pay(double amount) {
 
         if(cardBalance < amount){
-            throw new RuntimeException("You have insufficient funds to complete this transaction.");
+            throw new RuntimeException("The amount due cannot be zero or less");
         }
         cardBalance -= amount;
-        return new PaymentResult(true, "CARD-Transaction", "Withdrew:R" + amount + "\n Remaining Balance:R" + cardBalance);
+        return new PaymentResult(true, "CARD-Transaction", "PAID : R" + amount + "\nRemaining Balance : R" + cardBalance);
     }
 
     @Override

@@ -16,18 +16,17 @@ public class VoucherPayment implements PaymentMethod {
 
 
         if(voucherAmount < amount){
-            throw new RuntimeException("You have insufficient funds to complete this transaction.");
+            throw new RuntimeException("The amount due cannot be zero or less");
         }
         voucherAmount -= amount;
-        return new PaymentResult(true, "VOUCHER-Transaction", "Withdrew:R" + amount + "\n Remaining Balance:R" + voucherAmount);
-
+        return new PaymentResult(true, "VOUCHER-Transaction", "PAID : R" + amount + "\nRemaining Balance : R" + voucherAmount);
     }
 
     @Override
     public String getDisplayName() {
 
         if(voucherAmount <= 0){
-            return "Voucher Code " + voucherCode + " , has been completely used up";
+            return "Voucher Code " + voucherCode + " has been fully redeemed";
         }else {
             return "Voucher Code " + voucherCode + " , has R" + voucherAmount + " remaining";
         }

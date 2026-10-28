@@ -15,10 +15,10 @@ public class InstantEftPayment implements PaymentMethod{
     public PaymentResult pay(double amount) {
 
         if(eftBalance < amount){
-            throw new RuntimeException("You have insufficient funds to complete this transaction.");
+            throw new RuntimeException("The amount due cannot be zero or less");
         }
         eftBalance -= amount;
-        return new PaymentResult(true, "EFT-Transaction", "Withdrew:R" + amount + "\n Remaining Balance:R" + eftBalance);
+        return new PaymentResult(true, "EFT-Transaction", "PAID : R" + amount + "\nRemaining Balance : R" + eftBalance);
     }
 
     @Override
