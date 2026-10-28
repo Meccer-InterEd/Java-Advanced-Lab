@@ -20,15 +20,15 @@ public class VoucherPayment implements PaymentMethod{
                 voucherBalance = voucherBalance.subtract(amount);
                 VoucherPayment.paymentNum += 1;
                 reference = new StringBuilder("VCH").append("-").append(voucherHolder.replace(" ","_")).append("-").append(paymentNum);
-                return new PaymentResult(true,reference.toString(),"Successfully made an voucher payment R"+amount);
+                return new PaymentResult(true,reference.toString(),"Ref: "+reference+" | Successfully made an voucher payment R"+amount+" | Current balance: R"+voucherBalance);
             }
             System.out.println("\nVoucher payment unsuccessful! voucher balance is insufficient.");
         }
-        return new PaymentResult(false,"VCHFailed","Failed to make an voucher payment of R"+amount);
+        return new PaymentResult(false,"VCH-Failed","Failed to make an voucher payment of R"+amount);
     }
 
     @Override
     public String getDisplayName() {
-        return voucherHolder;
+        return "Payment Type: Voucher\nVoucher Holder: "+voucherHolder+"\nReference: "+reference;
     }
 }
