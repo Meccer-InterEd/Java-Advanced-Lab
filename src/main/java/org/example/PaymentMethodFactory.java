@@ -7,6 +7,8 @@ public class PaymentMethodFactory {
     public static PaymentMethod getPaymentMethod(PaymentType type, double defaultVoucherBalance) {
         if (type == null) {
             throw new IllegalArgumentException("Payment type cannot be null");
+        } else if (defaultVoucherBalance <= 0) {
+            throw new IllegalArgumentException("Voucher Balance cannon be zero or negative");
         }
 
         return switch (type) {

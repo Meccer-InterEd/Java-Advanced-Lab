@@ -1,5 +1,7 @@
 package org.example;
 
+import com.sun.jdi.connect.Connector;
+
 public class Booking {
     private String bookingID;
     private String fullName;
@@ -56,15 +58,24 @@ public class Booking {
     }
 
 
-    public void cancelBooking() {
+    public boolean cancelBooking() {
         if (bookingStatus == BookingStatus.CANCELLED) {
-            System.out.println("Booking status for booking ID: " + getBookingID() + " is: " + getBookingStatus());
+            System.out.println("Booking status for booking ID: " + getBookingID() + " is already: " + getBookingStatus());
+            return false;
+        } else {
+            this.bookingStatus = BookingStatus.CANCELLED;
+            return true;
         }
     }
 
-    public void confirmBooking() {
+    public Boolean confirmBooking() {
         if (bookingStatus == BookingStatus.CONFIRMED) {
-            System.out.println("Booking for booking ID: " + getBookingID() + " is: " + getBookingStatus());
+            System.out.println("Booking for booking ID: " + getBookingID() + " is already: " + getBookingStatus());
+            return false;
+        } else {
+            this.bookingStatus = BookingStatus.CONFIRMED;
+            System.out.println("Booking for booking ID: " + getBookingID() + " is now: " + getBookingStatus());
+            return true;
         }
     }
 

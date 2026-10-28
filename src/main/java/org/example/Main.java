@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -42,7 +43,8 @@ public class Main {
         PaymentMethodFactory paymentMethodFactory = new PaymentMethodFactory();
         paymentMethodFactory.display();
 
-//        CourtBookingRequest courtBookingRequest = new CourtBookingRequest("CUS_001", 141, LocalDate.now(), LocalTime.from();
+        BookingSummary bookingSummary = new BookingSummary();
+        bookingSummary.display();
 
     }
 
