@@ -3,7 +3,7 @@ package org.example;
 public class CheckoutService {
 
 
-    void checkout (double amount, PaymentMethod payment){
+    PaymentResult checkout (double amount, PaymentMethod payment){
         PaymentResult result = payment.pay(amount);
 
         System.out.println("Payment method: " + payment.getDisplayName());
@@ -12,9 +12,9 @@ public class CheckoutService {
         System.out.println("Reference: " + result.reference());
         System.out.println("Message: " + result.message());
         System.out.println("---------------------------------------------------------------");
+        return payment.pay(amount);
 
     }
-
 
 }
 

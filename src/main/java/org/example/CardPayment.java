@@ -1,8 +1,7 @@
 package org.example;
 
-import java.math.BigDecimal;
-
 public class CardPayment implements PaymentMethod{
+
     @Override
     public PaymentResult pay(double amount) {
         if(amount <= 0){

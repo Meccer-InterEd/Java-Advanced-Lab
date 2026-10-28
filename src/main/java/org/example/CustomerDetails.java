@@ -1,16 +1,15 @@
 package org.example;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-public record CustomerDetails(String customerId, int courtNumber, LocalDate bookingDate, LocalTime startTime, int durationMinutes) {
+public record CustomerDetails(String fullName, String email , String phoneNumber) {
     public CustomerDetails{
-        if(customerId == null && customerId.isEmpty()){
-            throw new IllegalArgumentException("Customer ID can not be blank.");
+        if(fullName.equals(null)){
+            throw new IllegalArgumentException("Full name can not be blank.");
         }
-        if(courtNumber < 0 || courtNumber > 100){
-            throw new IllegalArgumentException("Invalid court number");
+        if(phoneNumber.equals(null)){
+            throw new IllegalArgumentException("Phone number can not be blank");
         }
-        if(bookingDate )
+        if(!email.contains("@")){
+            throw new IllegalArgumentException("Email must have an @ symbol");
+        }
     }
 }
