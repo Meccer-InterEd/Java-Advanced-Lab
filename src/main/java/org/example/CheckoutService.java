@@ -18,7 +18,7 @@ public class CheckoutService {
 
     void printSummary(PaymentMethod method, PaymentResult result){
 
-        System.out.println("============================================");
+        System.out.println("===================================================================");
         System.out.println("Payment method : " + method.getDisplayName());
         System.out.println("Status : " + result.successful());
         System.out.println("Reference : " + result.reference());

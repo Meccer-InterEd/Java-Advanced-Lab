@@ -3,7 +3,6 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
 
-
         CheckoutService checkoutService = new CheckoutService();
 
         PaymentMethod card = new CardPayment("Capitec", 250);
