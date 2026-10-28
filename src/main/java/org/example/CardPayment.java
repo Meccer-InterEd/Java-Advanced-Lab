@@ -15,7 +15,7 @@ public class CardPayment implements PaymentMethod{
         if (amount.compareTo(balance) > 0) {
             return new PaymentResult(
                     false,
-                    "VC-1001",
+                    "CP-1001",
                     "Failed: Insufficient Card balance"
             );
         }
@@ -24,7 +24,7 @@ public class CardPayment implements PaymentMethod{
 
         return new PaymentResult(
                 true,
-                "VC-1001",
+                "CP-1001",
                 "Card payment successful"
         );
     }

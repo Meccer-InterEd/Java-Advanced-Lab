@@ -1,28 +1,74 @@
+
 package org.example;
-
-
-
 
 import java.math.BigDecimal;
 
 public class Main {
+
     public static void main(String[] args) {
-        Order order1 = new Order("ORD-1001", "Lerato", "249.99",OrderStatus.PLACED, PaymentStatus.PENDING, DeliveryMethod.COLLECTION);
-        Order order2 = new Order("ORD-1002", "Nompumelelo", "249.99",OrderStatus.CONFIRMED, PaymentStatus.PAID, DeliveryMethod.STANDARD_DELIVERY);
-        Order order3 = new Order("ORD-1003", "Precious", "249.99",OrderStatus.OUT_FOR_DELIVERY, PaymentStatus.PAID, DeliveryMethod.EXPRESS_DELIVERY);
-        order1.displayStatus();
-        VoucherPayment voucherPayment = new VoucherPayment(BigDecimal.valueOf(2000.99));
-PaymentResult paymentResult = new PaymentResult(true, "VC-0024","Voucher payment successful");
-CheckOutService checkOutService = new CheckOutService();
-PaymentMethod card = new CardPayment(BigDecimal.valueOf());
 
-checkOutService.checkout(card, new BigDecimal());
+        Order order1 = new Order(
+                "ORD-1001", "Lerato", "249.99",
+                OrderStatus.PLACED,
+                PaymentStatus.PENDING,
+                DeliveryMethod.COLLECTION
+        );
+
+        Order order2 = new Order(
+                "ORD-1002", "Nompumelelo", "249.99",
+                OrderStatus.PLACED,
+                PaymentStatus.PENDING,
+                DeliveryMethod.STANDARD_DELIVERY
+        );
+
+        Order order3 = new Order(
+                "ORD-1003", "Precious", "249.99",
+                OrderStatus.PLACED,
+                PaymentStatus.PENDING,
+                DeliveryMethod.EXPRESS_DELIVERY
+        );
+
+        CheckOutService checkout = new CheckOutService();
+
+        CardPayment card =
+                new CardPayment(new BigDecimal("500.00"));
+
+        VoucherPayment voucher =
+                new VoucherPayment(new BigDecimal("100.00"));
+
+        InstantEftPayment eft = new InstantEftPayment();
+
+        BigDecimal total1 = order1.getTotamt()
+                .add(order1.deliveryPrice());
+
+        BigDecimal total2 = order2.getTotamt()
+                .add(order2.deliveryPrice());
+
+        BigDecimal total3 = order3.getTotamt()
+                .add(order3.deliveryPrice());
+
+        System.out.println("\n===== ORDER 1 =====");
+        order1.displayCustomer();
+        PaymentResult result1 = checkout.checkout(card, total1);
+        if (result1.successful()) {
+            order1.makePayment(card);
+        }
 
 
+        System.out.println("\n===== ORDER 2 =====");
+        order2.displayCustomer();
+        PaymentResult result2 = checkout.checkout(voucher, total2);
+        if (result2.successful()) {
+            order2.makePayment(voucher);
+        }
 
+
+        System.out.println("\n===== ORDER 3 =====");
+        order3.displayCustomer();
+        PaymentResult result3 = checkout.checkout(eft, total3);
+        if (result3.successful()) {
+            order3.makePayment(eft);
+        }
 
     }
-
-
 }
-

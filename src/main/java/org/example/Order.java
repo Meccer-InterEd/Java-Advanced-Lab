@@ -52,11 +52,10 @@ public class Order {
         }
     }
 
-    void displayStatus(){
+    void displayCustomer(){
         System.out.println("Customer Name: " + name +
-                " Order number: "+ orderNum +
-                " Order Status: " + orderStatus +
-                " Payment Status: "+ paymentStatus);
+                "\nOrder Number: " + orderNum
+               );
     }
 
 
@@ -112,6 +111,22 @@ public class Order {
         }
         return null;
     }
+    public PaymentResult makePayment(PaymentMethod paymentMethod) {
+
+        PaymentResult result = paymentMethod.pay(totAmt);
+
+        if (result.successful()) {
+            paymentStatus = PaymentStatus.PAID;
+            System.out.println(result.message());
+            confirmOrder();
+        } else {
+            System.out.println(result.message());
+        }
+
+        return result;
+    }
+
+
 
 
 }
