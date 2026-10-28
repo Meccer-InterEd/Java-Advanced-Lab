@@ -14,5 +14,17 @@ public class Main {
         order2.totalCost();
         order3.info();
         order3.totalCost();
+
+        CheckoutService cs =  new CheckoutService();
+        PaymentMethod cp = new CardPayment();
+        PaymentMethod eft = new InstantEftPayment();
+        PaymentMethod vp = new VoucherPayment(new BigDecimal("600.00"));
+
+        System.out.println("=== CARD PAYMENT ===");
+        cs.checkout(cp, new BigDecimal("200.00"));
+        System.out.println("\n=== EFT PAYMENT ===");
+        cs.checkout(eft, new BigDecimal("300"));
+        System.out.println("\n=== VOUCHER PAYMENT ===");
+        cs.checkout(vp, new BigDecimal("330"));
         }
     }
