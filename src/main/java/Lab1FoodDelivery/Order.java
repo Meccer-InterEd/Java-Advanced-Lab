@@ -14,10 +14,10 @@ public class Order {
     private DeliveryMethod deliveryMethod;
 
     public Order(int orderNumber, String name,
-                 BigDecimal amount, DeliveryMethod deliveryMethod){
+                 double totalAmount, DeliveryMethod deliveryMethod){
         this.orderNumber = orderNumber;
         this.customerName = name;
-        this.totalAmount = amount;
+        this.totalAmount = BigDecimal.valueOf(totalAmount);
         this.status = OrderStatus.PLACED;
         this.paymentStatus = PaymentStatus.PENDING;
         this.deliveryMethod = deliveryMethod;
@@ -47,16 +47,16 @@ public class Order {
         this.paymentStatus = paymentStatus;
     }
 
-    public double deliveryFee() {
+    public BigDecimal calculateDeliveryFee() {
         return switch (deliveryMethod) {
-            case COLLECTION -> 0.0;
-            case STANDARD_DELIVERY -> 35.0;
-            case EXPRESS_DELIVERY -> 65.0;
+            case COLLECTION -> BigDecimal.ZERO;
+            case STANDARD_DELIVERY -> BigDecimal.valueOf(35);
+            case EXPRESS_DELIVERY -> BigDecimal.valueOf(65);
         };
     }
 
-    public double calculateTotal() {
-        return totalAmount + deliveryFee();
+    public BigDecimal getFinalTotal() {
+        return totalAmount.add(calculateDeliveryFee());   // BigDecimal + BigDecimal
     }
 
 
@@ -95,8 +95,8 @@ public class Order {
         System.out.println("Payment Status: " + paymentStatus);
         System.out.println("Delivery Method: " + deliveryMethod);
         System.out.printf("Food Total: R %n", totalAmount);
-        System.out.printf("Delivery Fee: R %n", deliveryFee());
-        System.out.printf("Grand Total: R %n", calculateTotal());
+        System.out.printf("Delivery Fee: R %n", calculateDeliveryFee());
+        System.out.printf("Grand Total: R %n", getFinalTotal());
         System.out.println("=========================");
     }
 
