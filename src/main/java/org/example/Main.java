@@ -25,6 +25,12 @@ public class Main {
         order2.displayDetails();
 
 
+        CheckoutService service = new CheckoutService();
+        service.checkout(150.50, new CardPayment());
+        service.checkout(200.00, new InstantEftPayment());
+        service.checkout(10.00, new VoucherPayment());
+
+
 
 
 
