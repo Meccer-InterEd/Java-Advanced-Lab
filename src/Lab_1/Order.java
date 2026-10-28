@@ -19,15 +19,25 @@ public class Order {
         this.orderNumber = orderNumber;
         this.CustomerName = CustomerName;
         this.deliveryMethod = deliveryMethod;
+
+        if (totalAmount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+
         this.totalAmount = totalAmount;
 
         orderStatus = OrderStatus.PLACED;
         paymentStatus = PaymentStatus.PENDING;
 
     }
+        public void pay() {
+        if (orderStatus == OrderStatus.DELIVERED
+                || orderStatus == OrderStatus.CANCELLED) {
+            System.out.println("Order cannot be changed");
 
-    public void pay() {
-        paymentStatus = PaymentStatus.PAID;
+        } else {
+            paymentStatus = PaymentStatus.PAID;
+        }
     }
 
     public void confirmDetails() {
@@ -44,24 +54,56 @@ public class Order {
             orderStatus = OrderStatus.PREPARING;
         }
         else {
+
             System.out.println("Order must be confirmed");
         }
     }
 
         public void Collection() {
-              if (orderStatus == OrderStatus.PREPARING) {
-                  orderStatus = OrderStatus.READY_FOR_COLLECTION;
-              }
-          }
+            if (orderStatus == OrderStatus.PREPARING) {
+                orderStatus = OrderStatus.READY_FOR_COLLECTION;
+            }
 
-          if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
-           deliveryMethod == DeliveryMethod.COLLECTION){
-           orderStatus = OrderStatus.DELIVERED;
+
+            else if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
+                    deliveryMethod == DeliveryMethod.COLLECTION) {
+                    orderStatus = OrderStatus.DELIVERED;
+
+            }
+
+            else if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
+             deliveryMethod == DeliveryMethod.STANDARD_DELIVERY) {
+                orderStatus = OrderStatus.OUT_FOR_DELIVERY;
+            }
+
+else if (orderStatus == OrderStatus.OUT_FOR_DELIVERY) {
+          orderStatus = OrderStatus.DELIVERED;
     }
- else if (orderStatus == OrderStatus.READY_FOR_COLLECTION &&
-      deliveryMethod == DeliveryMethod.STANDARD_DELIVERY)
-      orderStatus = OrderStatus.OUT_FOR_DELIVERY)
+else {
+        System.out.println("Order not ready");
+    }
+}
 
+public BigDecimal delivery() {
+
+        if (deliveryMethod == DeliveryMethod.COLLECTION) {
+            return BigDecimal.ZERO;
+        } else if (deliveryMethod == DeliveryMethod.STANDARD_DELIVERY) {
+            return new BigDecimal("35");
+        } else {
+            return new BigDecimal("65");
+        }
+    }
+ public void Cancel() {
+        if (orderStatus == OrderStatus.OUT_FOR_DELIVERY ||
+                orderStatus == OrderStatus.DELIVERED) {
+            System.out.println("Order can't be canceled");
+
+        }
+        else {
+            orderStatus = OrderStatus.CANCELLED;
+        }
+    }
 
     public void details() {
         System.out.println(orderNumber);
@@ -71,4 +113,4 @@ public class Order {
         System.out.println(paymentStatus);
         System.out.println(deliveryMethod);
     }
-}
+    }

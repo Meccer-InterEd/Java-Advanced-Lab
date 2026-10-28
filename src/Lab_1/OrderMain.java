@@ -10,14 +10,18 @@ public class OrderMain {
                 "ORD-1001",
                 "Lerato",
                 new BigDecimal ("249.99"),
-                DeliveryMethod.STANDARD_DELIVERY
+                DeliveryMethod.COLLECTION
         );
 
+        //order1.pay();
+        //order1.confirmDetails();
 
-        order1.pay();
-        order1.confirmDetails();
+        //order1.PrepareDetails();
+        //order1.Collection();
 
+        order1.Cancel();
         order1.details();
+
 
 
     }
