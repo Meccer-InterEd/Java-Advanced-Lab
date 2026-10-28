@@ -3,6 +3,9 @@ package org.example;
 
 //import jdk.swing.interop.SwingInterOpUtils;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Main {
     public static void main(String[] args) {
         System.out.println("Do good and be productive!!");
@@ -29,6 +32,42 @@ public class Main {
         service.checkout(150.50, new CardPayment());
         service.checkout(200.00, new InstantEftPayment());
         service.checkout(10.00, new VoucherPayment());
+
+
+        CustomerDetails customer = new CustomerDetails(
+                "Sam Smith",
+                "sam@example.com",
+                "0712345678"
+        );
+
+        CourtBookingRequest request =
+                new CourtBookingRequest(
+                        "C101",
+                        2,
+                        LocalDate.of(2026, 11, 5),
+                        LocalTime.of(10, 0),
+                        60
+                );
+
+        Booking booking = new Booking("B001", request);
+
+        System.out.println(booking.getStatus());
+
+
+        booking.confirm();
+
+        System.out.println(booking.getStatus());
+
+        BookingSummary summary = new BookingSummary(
+                booking.getBookingId(),
+                request.courtNumber(),
+                request.bookingDate(),
+                request.startTime(),
+                request.durationMinutes(),
+                booking.getStatus()
+        );
+
+        System.out.println(summary);
 
 
 
