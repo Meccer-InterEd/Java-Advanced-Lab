@@ -3,9 +3,6 @@ package org.example;
 
 
 
-import org.example.Interface_Payment_System.InstantEftPayment;
-
-import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class Main {

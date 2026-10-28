@@ -1,7 +1,6 @@
-package org.example.Interface_Payment_System;
+package org.example.Lab02_Interface_Payment_System;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class InstantEftPayment implements PaymentMethod{
     private BigDecimal balance = new BigDecimal("2000.00");

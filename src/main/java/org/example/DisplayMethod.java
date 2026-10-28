@@ -1,14 +1,12 @@
 package org.example;
 
-import org.example.Interface_Payment_System.*;
+import org.example.Lab02_Interface_Payment_System.*;
 import org.example.Lab01_Enum_Food_Delivery_Order.DeliveryMethod;
 import org.example.Lab01_Enum_Food_Delivery_Order.Order;
 import org.example.Lab01_Enum_Food_Delivery_Order.PaymentStatus;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Scanner;
-import java.util.function.DoubleToIntFunction;
 
 public class DisplayMethod {
     Scanner scanner = new Scanner(System.in);
