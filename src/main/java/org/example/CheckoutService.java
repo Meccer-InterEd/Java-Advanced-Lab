@@ -1,12 +1,7 @@
 package org.example;
 
-import java.math.BigDecimal;
-
 public class CheckoutService {
 
-//    CardPayment cardPayment = new CardPayment();
-//    InstantEftPayment instantEftPayment = new InstantEftPayment();
-//    VoucherPayment voucherPayment = new VoucherPayment();
 
     void checkout (double amount, PaymentMethod payment){
         PaymentResult result = payment.pay(amount);
