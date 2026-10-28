@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class VoucherPayment implements PaymentMethod{
 
     private BigDecimal balance;
-    private static int counter = 1;
+    private static int counter = 30;
 
     public VoucherPayment(BigDecimal balance) {
         this.balance = balance;
