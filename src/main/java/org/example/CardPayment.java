@@ -6,31 +6,17 @@ package org.example;
 import java.math.BigDecimal;
 
 public class CardPayment implements PaymentMethod {
-     String cardNumber;
-     String cardHolderName;
-     BigDecimal balance;
-     private String displayName;
-
-
-    public CardPayment(String cardNumber, String cardHolderName, BigDecimal balance) {
-        this.cardNumber = cardNumber;
-        this.cardHolderName = cardHolderName;
-        this.balance = balance;
-    }
-    @Override
-    public String getDisplayName() {
-        return "";
-    }
     @Override
     public PaymentResult pay(BigDecimal amount) {
-        if (amount.compareTo(balance) == 0) {
-            System.out.println("Purchase was successful");
-            boolean successful = true;
-        } else {
-            System.out.println("Payment failed");
-            boolean successful = false;
-        }
-        return null;
+        return new PaymentResult(
+                true,
+                "CP-1001",
+                "CARD PAYMENT WAS SUCCESSFUL!!"
+        );
+    }
 
+    @Override
+    public String getDisplayName() {
+        return "Card Payment.";
     }
 }
