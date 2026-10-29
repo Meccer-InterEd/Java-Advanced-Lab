@@ -36,5 +36,21 @@ public class Main {
         order2.cancelOrder();
 
         order2.Summary();
+
+        PaymentMethod cardPayment = new CardPayment(new BigDecimal(300));
+        PaymentMethod EFTPayment = new InstantEFTPayment(new BigDecimal(200.00));
+        PaymentMethod voucherPayment = new VoucherPayment(new BigDecimal(100.0));
+
+        CheckoutService service = new CheckoutService(cardPayment);
+        service.checkout(new BigDecimal(150.00));
+        System.out.println(cardPayment.getDisplayName());;
+
+        CheckoutService service1 = new CheckoutService(EFTPayment);
+        service1.checkout(new BigDecimal(199.00));
+        System.out.println(EFTPayment.getDisplayName());
+
+        CheckoutService service2 = new CheckoutService(voucherPayment);
+        service2.checkout(new BigDecimal(90.00));
+        System.out.println(voucherPayment.getDisplayName());
     }
 }
