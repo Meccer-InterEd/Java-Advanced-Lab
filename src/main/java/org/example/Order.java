@@ -52,19 +52,6 @@ public class Order {
         }
     }
 
-    void displayCustomer(){
-        System.out.println("Customer Name: " + name +
-                "\nOrder Number: " + orderNum
-               );
-    }
-
-
-    
-
-
-
-
-
     //void switch_status(){
 
    // switch (orderStatus) {
@@ -124,6 +111,13 @@ public class Order {
         }
 
         return result;
+    }
+
+    void displayCustomer(){
+        System.out.println("Customer Name: " + name +
+                "\nOrder Number: " + orderNum +
+                "\nOrder Status: " + orderStatus
+        );
     }
 
 

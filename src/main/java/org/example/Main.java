@@ -1,6 +1,7 @@
 
 package org.example;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.math.BigDecimal;
 
 public class Main {
@@ -69,6 +70,14 @@ public class Main {
         if (result3.successful()) {
             order3.makePayment(eft);
         }
+        System.out.println("=================end of lab====================");
+
+        CustomerDetails customerDetails = new CustomerDetails("John Dube", "lucky428@redemption.com","0712233344");
+        CourtBookingRequest request = new CourtBookingRequest("123456g", 5, LocalDate.of(2026,11,2),LocalTime.of(11,50), 50);
+Booking booking = new Booking("12456",request,BookingStatus.CANCELLED);
+booking.confirm();
+booking.confirm();
+booking.displayBooking();
 
     }
 }
