@@ -1,8 +1,13 @@
 package org.example;
 
+import java.math.BigDecimal;
+
 public class Main {
     public static void main(String[] args) {
 
+        //Lab 1:
+
+        /*
         Order order1 = new Order(101, "Makwa", 350.50,
                 OrderStatus.PLACED, PaymentStatus.PENDING, DeliveryMethod.EXPRESS_DELIVERY);
 
@@ -27,6 +32,17 @@ public class Main {
         order1.cancelOrder();
         order1.displayOrderSummary();
         order1.updateStatus();
+
+         */
+
+        //Lab 2:
+
+        CheckoutService checkoutService = new CheckoutService();
+
+        checkoutService.checkout(new CardPayment(), new BigDecimal(1000));
+        checkoutService.checkout(new InstantEftPayment(), new BigDecimal(340));
+        checkoutService.checkout(new VoucherPayment(new BigDecimal(600)), new BigDecimal(543.50));
+
         }
 
     }
