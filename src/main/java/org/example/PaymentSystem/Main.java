@@ -8,8 +8,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         CheckoutService c = new CheckoutService();
 
-    Voucher voucher = new Voucher("1234567","2222222",new BigDecimal("50.00"));
-    InstantEFT EFT = new InstantEFT("12323344","Thamsanqa",new BigDecimal("450.00"));
+    Voucher voucher = new Voucher("1234567","2222222",new BigDecimal("-50.00"));
+    InstantEFT EFT = new InstantEFT("12323344","Thamsanqa",new BigDecimal("-450.00"));
     CardPayment card = new CardPayment("55683635683","Thamsanqa", new BigDecimal("700.00"));
 
         System.out.println("Enter amount to pay?");
