@@ -22,14 +22,14 @@ public class Main {
         attempt(order::cancel);
         attempt(() -> new Order("ORD-1002", "Sipho", Money.of("-5"), DeliveryMethod.COLLECTION));
 
-//        LAB 2
-
+//        LAB 2 073 628 6064
         System.out.println("\n--------------LAB 2--------------");
         CheckoutService checkout = new CheckoutService();
         checkout.display_checkout(new CardPayment(Money.of("1000")), Money.of("150"));
         checkout.display_checkout(new VoucherPayment(Money.of("100")), Money.of("150"));
-        checkout.display_checkout(PaymentMethodFactory.create(PaymentType.INSTANT_EFT), Money.of("150"));
+        checkout.display_checkout(PaymentMethodFactory.create(PaymentType.INSTANT_EFT), new BigDecimal("150"));
         attempt(() -> checkout.display_checkout(new CardPayment(Money.of("1000")), BigDecimal.ZERO));
+
     }
 
     static void attempt(Runnable action){
