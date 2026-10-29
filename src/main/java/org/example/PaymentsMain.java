@@ -10,7 +10,7 @@ public class PaymentsMain {
         PaymentMethod cardPayment = PaymentMethodFactory.manufacturePaymentMethod(
                 PaymentType.CARD_PAYMENT,
                 "John Doe",
-                new BigDecimal("250.00")
+                new BigDecimal("350.00")
         );
 
         PaymentMethod eftPayment = PaymentMethodFactory.manufacturePaymentMethod(

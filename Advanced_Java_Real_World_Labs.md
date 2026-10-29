@@ -171,7 +171,9 @@ Add a `PaymentMethodFactory` that selects a payment implementation from a `Payme
 
 ## Real-life scenario
 
-A community sports centre lets people book courts. A booking request contains information submitted by a customer, while a booking entity has identity and behaviour over time.
+A community sports centre lets people book courts. 
+A booking request contains information submitted by a customer, 
+while a booking entity has identity and behaviour over time.
 
 This lab helps you decide when a Java record is suitable and when a normal class is better.
 
@@ -197,7 +199,9 @@ public record CourtBookingRequest(
 ) {}
 ```
 
-Create a normal `Booking` class with a booking ID, a `CourtBookingRequest`, and a `BookingStatus` enum. The booking can be confirmed or cancelled, so its state changes over time.
+Create a normal `Booking` class with a 
+booking ID, a `CourtBookingRequest`, and a `BookingStatus` enum. 
+The booking can be confirmed or cancelled, so its state changes over time.
 
 ## Tasks
 
