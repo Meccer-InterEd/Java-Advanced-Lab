@@ -1,20 +1,18 @@
 package org.example;
 
-import com.sun.jdi.connect.Connector;
-
 public class Booking {
     private String bookingID;
-    private String fullName;
     private String bookingLocation;
     private BookingStatus bookingStatus;
     private CourtBookingRequest courtBookingRequest;
+    private CustomerDetails customerDetails;
 
-    public Booking(String bookingID, String fullName, String bookingLocation, BookingStatus bookingStatus, CourtBookingRequest courtBookingRequest) {
+    public Booking(String bookingID, String bookingLocation, BookingStatus bookingStatus, CourtBookingRequest courtBookingRequest, CustomerDetails customerDetails) {
         setBookingID(bookingID);
-        setFullName(fullName);
         setBookingLocation(bookingLocation);
         setBookingStatus(bookingStatus);
         setCourtBookingRequest(courtBookingRequest);
+        setCustomerDetails(customerDetails);
     }
 
     public String getBookingID() {
@@ -23,14 +21,6 @@ public class Booking {
 
     public void setBookingID(String bookingID) {
         this.bookingID = bookingID;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getBookingLocation() {
@@ -57,25 +47,28 @@ public class Booking {
         this.courtBookingRequest = courtBookingRequest;
     }
 
+    public CustomerDetails getCustomerDetails() {
+        return customerDetails;
+    }
 
-    public boolean cancelBooking() {
+    public void setCustomerDetails(CustomerDetails customerDetails) {
+        this.customerDetails = customerDetails;
+    }
+
+    public void cancelBooking() {
         if (bookingStatus == BookingStatus.CANCELLED) {
             System.out.println("Booking status for booking ID: " + getBookingID() + " is already: " + getBookingStatus());
-            return false;
         } else {
             this.bookingStatus = BookingStatus.CANCELLED;
-            return true;
         }
     }
 
-    public Boolean confirmBooking() {
+    public void confirmBooking() {
         if (bookingStatus == BookingStatus.CONFIRMED) {
             System.out.println("Booking for booking ID: " + getBookingID() + " is already: " + getBookingStatus());
-            return false;
         } else {
             this.bookingStatus = BookingStatus.CONFIRMED;
             System.out.println("Booking for booking ID: " + getBookingID() + " is now: " + getBookingStatus());
-            return true;
         }
     }
 

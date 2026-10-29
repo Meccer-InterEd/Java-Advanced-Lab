@@ -7,9 +7,11 @@ public record CourtBookingRequest(String customerId, int courtNumber, LocalDate 
     public CourtBookingRequest {
         if (customerId == null || customerId.isEmpty()) {
             throw new IllegalArgumentException("Customer ID cannot be left empty");
-        } else if (courtNumber <= 0) {
+        }
+        if (courtNumber <= 0) {
             throw new IllegalArgumentException("Number cannot be below 1");
-        } else if (durationMinutes < 0) {
+        }
+        if (durationMinutes < 0) {
             throw new IllegalArgumentException("Duration in minutes cannot be negative");
         }
     }
