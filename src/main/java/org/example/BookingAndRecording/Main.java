@@ -27,10 +27,20 @@ public class Main {
 
         for(Booking b : bookings){
             int cNum = b.getBookingRequest().courtNumber();
+            LocalDate date = b.getBookingRequest().bookingDate();
+            LocalTime time = b.getBookingRequest().startTime();
+            CustomerDetails cDetails = b.getCustomerDetails();
+
+            bookingSummaryList.add(new BookingSummary(cNum,date,time,cDetails));
 
         }
 
-
+        for(BookingSummary bs : bookingSummaryList){
+            System.out.println("Court Number:" + bs.courtNumber() +
+                                "\nDate: " + bs.date() +
+                                "\nTime: " + bs.time() +
+                                "\nCustomer Details :" + bs.customerDetails().fullName() + " | " + bs.customerDetails().email() + " | " + bs.customerDetails().phoneNumber());
+        }
 
 
 
