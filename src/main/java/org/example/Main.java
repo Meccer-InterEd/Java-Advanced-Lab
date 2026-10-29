@@ -1,17 +1,17 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Main {
     public static void main(String[] args) {
 
-        CheckoutService checkoutService = new CheckoutService();
-
-        PaymentMethod card = new CardPayment("Capitec", 250);
-        PaymentMethod eft = new InstantEftPayment("Absa", 250);
-        PaymentMethod voucher = new VoucherPayment("VC-001", 250);
-
-        checkoutService.checkout(card, 150);
-        checkoutService.checkout(eft, 100);
-        checkoutService.checkout(voucher, 250);
+        CourtBookingRequest courtBookingRequest = new CourtBookingRequest("111", 2, LocalDate.of(2026, 12, 26), LocalTime.of(9, 30), 60);
+        Booking booking = new Booking("123", courtBookingRequest);
+        booking.confirm();
+        //booking.cancel();
+        BookingSummary summary = new BookingSummary("Thami", "111", 2, LocalDate.of(2026, 12, 26), booking.bookingStatus);
+        summary.displayBooking();
 
     }
 }

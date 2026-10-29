@@ -7,10 +7,25 @@ public class Booking {
     BookingStatus bookingStatus;
 
 
-    void confirmation(){
+    public Booking(String bookingID, CourtBookingRequest bookingRequest){
 
-        if(bookingStatus == BookingStatus.REQUESTED){
-
-        }
+        this.bookingID = bookingID;
+        this.bookingRequest = bookingRequest;
+        this.bookingStatus = BookingStatus.REQUESTED;
     }
+
+    void confirm(){
+
+        if(bookingStatus == BookingStatus.CANCELLED){
+
+            throw new RuntimeException("This  booking is already cancelled!");
+        }
+        bookingStatus = BookingStatus.CONFIRMED;
+    }
+
+    void cancel(){
+
+        bookingStatus = BookingStatus.CANCELLED;
+    }
+
 }
