@@ -22,6 +22,12 @@ public class BookingsRepository {
         database.remove(booking);
     }
 
+    public static void addBooking(Booking booking){
+        if(!isADuplicate){
+            database.add(booking);
+        }
+    }
+
     private static boolean checkDuplicate(Booking existing_booking, Booking new_booking){
 
         return existing_booking.getBookingRequest().courtNumber() == new_booking.getBookingRequest().courtNumber()

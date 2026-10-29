@@ -22,6 +22,7 @@ public class Booking {
             bookingId = "Court" + bookingRequest.courtNumber() + "_" +
                     bookingRequest.bookingDate() + "_" +(Booking.bookingNumber+=1);
             bookingStatus = BookingStatus.CONFIRMED;
+            BookingsRepository.addBooking(this);
             System.out.println("\nYour court booking has been confirmed : (Booking ID -> "+bookingId+")");
         } else if (bookingStatus.equals(BookingStatus.CONFIRMED)){
             System.out.println("\nThis booking has already been confirmed!");
@@ -43,5 +44,13 @@ public class Booking {
 
     public CourtBookingRequest getBookingRequest() {
         return bookingRequest;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public BookingStatus getBookingStatus() {
+        return bookingStatus;
     }
 }
