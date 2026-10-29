@@ -162,7 +162,7 @@ public class CheckoutService {
 
 ## Challenge
 
-Add a `PaymentMethodFactory` that selects a payment implementation from a `PaymentType` enum. Keep the factory small and testable.
+Add a `PaymentMethodFactory` that selects a payment implementation from aPaymentType` enum. Keep the factory small and testable.
 
 ---
 

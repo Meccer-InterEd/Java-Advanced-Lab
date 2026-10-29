@@ -1,5 +1,9 @@
 package org.example;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
+
 import static org.example.DeliveryMethod.*;
 import static org.example.OrderStatus.*;
 import static org.example.PaymentStatus.*;
@@ -29,14 +33,21 @@ public class Main {
         service.checkout(50.00, new VoucherPayment());
 
         System.out.println("LAB 3");
-        // creating objects of the class
+        // creating an objects of the record
         CustomerDetails c1 = new CustomerDetails("Siyabonga Ngobeni", "siyabonangobz@gmail.com", "0763452891");
         CustomerDetails c2 = new CustomerDetails("Lona Hans", "lonahans123@hotmail.com", "0822341069");
         CustomerDetails c3 = new CustomerDetails("Hishaam Kraft", "krafthishaam@yahoo.com", "0666783561");
+        // creating objects of the class
 
-        Booking b1 = new Booking("B001", c1);
-        Booking b2 = new Booking("B002", c2);
-        Booking b3 = new Booking("B003", c3);
+        LocalDate date = LocalDate.from(LocalDate.of(2026, 11, 22));
+        LocalTime time = LocalTime.from(LocalTime.of(13, 45, 12));
+        CourtBookingRequest d1 = new CourtBookingRequest(UUID.randomUUID().toString(), 4, date, time, 35);
+        CourtBookingRequest d2 = new CourtBookingRequest(UUID.randomUUID().toString(), 2 , date, time, 12);
+        CourtBookingRequest d3 = new CourtBookingRequest(UUID.randomUUID().toString(), 10, date, time, 55);
+
+        Booking b1 = new Booking("B001", c1, d1);
+        Booking b2 = new Booking("B002", c2, d2);
+        Booking b3 = new Booking("B003", c3, d3);
         b1.confirmedBooking();
         b2.canceledBooking();
         b2.confirmedBooking(); // this will cause an error since the b2 has already been cancelled, it can not be confirmed after
@@ -54,9 +65,15 @@ public class Main {
             System.out.println("Booking Id: " + b.getBookingId());
             System.out.println("Booking Status: " + b.getStatus());
             System.out.println("Customer Details: ");
-            System.out.println(b.getDetails().fullName());
-            System.out.println(b.getDetails().email());
-            System.out.println(b.getDetails().phoneNumber());
+            System.out.println("Name: " + b.getDetails().fullName());
+            System.out.println("Email: " + b.getDetails().email());
+            System.out.println("Phone number: " + b.getDetails().phoneNumber());
+            System.out.println("Customer Id: " + b.getRequest().customerId());
+            System.out.println("Court Number: " + b.getRequest().courtNumber());
+            System.out.println("Booking date: " + b.getRequest().bookingDate());
+            System.out.println("Start time:" + b.getRequest().startTime());
+            System.out.println("Duration: " + b.getRequest().durationMinutes());
+
             System.out.println();
 
             if(b.getStatus() == BookingStatus.REQUESTED){
