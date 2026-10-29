@@ -68,6 +68,11 @@ public class Main {
         );
 
         System.out.println(summary);
+        System.out.println(" ");
+
+        AnnotationScanner scanner = new AnnotationScanner();
+
+        scanner.scan(CustomerAccountService.class);
 
 
 
