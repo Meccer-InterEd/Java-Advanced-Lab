@@ -5,12 +5,32 @@ public class Booking {
     private CourtBookingRequest bookingRequest;
     private BookingStatus status;
 
-    public void confirmBooking(){
-
+    public Booking(int bookingId, CourtBookingRequest bookingRequest){
+        this.bookingId = bookingId;
+        this.bookingRequest = bookingRequest;
+        this.status = BookingStatus.REQUESTED;
     }
 
-    public void cancelBooking(){
 
+    public BookingStatus confirmBooking(){
+        if(this.status.equals(BookingStatus.CANCELLED)){
+            throw new IllegalArgumentException("Booking is cancelled");
+        }
+
+        if (this.status.equals(BookingStatus.CONFIRMED)){
+            throw new IllegalArgumentException("Booking already confirmed");
+        }
+        this.status = BookingStatus.CONFIRMED;
+        return status;
+    }
+
+    public BookingStatus cancelBooking(){
+        if (this.status.equals(BookingStatus.CANCELLED)){
+            throw new IllegalArgumentException("Booking already cancelled");
+        }
+
+        this.status = BookingStatus.CANCELLED;
+        return status;
     }
 
 }
