@@ -27,6 +27,6 @@ public class InstantEFT implements PaymentMethod{
 
     @Override
     public String getDisplayName() {
-        return "Instant EFT (\" + bankName + \")";
+      return null;
     }
 }

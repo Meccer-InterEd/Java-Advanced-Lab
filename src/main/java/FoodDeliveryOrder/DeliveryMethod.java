@@ -1,7 +1,0 @@
-package FoodDeliveryOrder;
-
-public enum DeliveryMethod {
-    COLLECTION,
-    STANDARD_DELIVERY,
-    EXPRESS_DELIVERY
-}
