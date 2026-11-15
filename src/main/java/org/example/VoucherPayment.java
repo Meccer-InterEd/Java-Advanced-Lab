@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class VoucherPayment implements PaymentMethod {
     private double voucherBalance = 200.00;
 
+
     @Override
     public PaymentResult pay(double amount) {
         if(amount > voucherBalance ){
