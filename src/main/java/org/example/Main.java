@@ -3,8 +3,11 @@ package org.example;
 
 //import jdk.swing.interop.SwingInterOpUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -73,6 +76,30 @@ public class Main {
         AnnotationScanner scanner = new AnnotationScanner();
 
         scanner.scan(CustomerAccountService.class);
+
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        vehicles.add(new RentalCar(
+                "ABC123",
+                "Toyota",
+                new BigDecimal("500")
+        ));
+
+
+        for (Vehicle vehicle : vehicles) {
+
+            System.out.println("\n--------------------");
+
+            vehicle.displayDetails();
+
+            System.out.println("2-Day Rental: R"
+                    + vehicle.calculateRentalCost(2));
+
+            System.out.println("7-Day Rental: R"
+                    + vehicle.calculateRentalCost(7));
+        }
+
+
 
 
 
