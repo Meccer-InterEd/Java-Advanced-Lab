@@ -46,6 +46,9 @@ public class Main {
         BookingSummary bookingSummary = new BookingSummary();
         bookingSummary.display();
 
+        AnnotationScanner.scan(CustomerAccountService.class);
+        System.out.println("----------------------------------------");
+        RoleAnnotationScanner.scan(AccountService.class);
     }
 
     private static void processTransaction (CheckoutService service, PaymentMethod method, double amount){
