@@ -1,11 +1,14 @@
 package org.example;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public abstract class Vehicle {
     private String regNumber;
     private String brand;
-    private double dailyRate;
+    private BigDecimal dailyRate;
 
-    public Vehicle(String regNumber, String brand, double dailyRate) {
+    public Vehicle(String regNumber, String brand, BigDecimal dailyRate) {
         setRegNumber(regNumber);
         setBrand(brand);
         setDailyRate(dailyRate);
@@ -33,14 +36,42 @@ public abstract class Vehicle {
         this.brand = brand.trim();
     }
 
-    public double getDailyRate() {
+    public BigDecimal getDailyRate() {
         return dailyRate;
     }
 
-    public void setDailyRate(double dailyRate) {
-        if (dailyRate <= 0) {
+    public void setDailyRate(BigDecimal dailyRate) {
+        if (dailyRate.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Daily rate cannot be zero or less");
         }
         this.dailyRate = dailyRate;
+    }
+
+    void validateRentalDays(int days) {
+        if (days < 1) {
+            throw new IllegalArgumentException("Rental period must be at least 1 day.");
+        }
+    }
+
+    protected BigDecimal calculateDiscountedBaseCost(int days) {
+        validateRentalDays(days);
+        BigDecimal rentalDays = BigDecimal.valueOf(days);
+        BigDecimal baseCost = dailyRate.multiply(rentalDays);
+
+        if (days >= 7) {
+            BigDecimal discountRate = new BigDecimal("0.10");
+            BigDecimal discount = baseCost.multiply(discountRate);
+            baseCost = baseCost.subtract(discount);
+        }
+
+        return baseCost.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public abstract BigDecimal calculateRentalCost(int days);
+
+    public void displayDetails() {
+        System.out.println("Registration Number: " + regNumber);
+        System.out.println("Brand: " + brand);
+        System.out.println("Daily Rate: R" + dailyRate);
     }
 }
