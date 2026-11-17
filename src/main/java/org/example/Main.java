@@ -57,6 +57,7 @@ public class Main {
         List<Vehicle> vehicles = new ArrayList<>();
         vehicles.add(new RentalCar("KK 22 WM GP", "Mercedes Benz", new BigDecimal("500.00")));
         vehicles.add(new RentalMotorcycle("CA 98 DD L", "Yamaha MT-07", new BigDecimal("300.00")));
+        vehicles.add(new ElectricCar("AA 22 QQ NW", "BYD Atto 3", new BigDecimal("650.00")));
 
         for (Vehicle vehicle : vehicles) {
             vehicle.displayDetails();
