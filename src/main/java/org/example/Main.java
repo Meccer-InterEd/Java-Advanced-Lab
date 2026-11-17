@@ -1,9 +1,12 @@
 package org.example;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.example.DeliveryMethod.*;
 import static org.example.OrderStatus.*;
@@ -49,6 +52,18 @@ public class Main {
         AnnotationScanner.scan(CustomerAccountService.class);
         System.out.println("----------------------------------------");
         RoleAnnotationScanner.scan(AccountService.class);
+        System.out.println("----------------------------------------");
+
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles.add(new RentalCar("KK 22 WM GP", "Mercedes Benz", new BigDecimal("500.00")));
+        vehicles.add(new RentalMotorcycle("CA 98 DD L", "Yamaha MT-07", new BigDecimal("300.00")));
+
+        for (Vehicle vehicle : vehicles) {
+            vehicle.displayDetails();
+            System.out.println("2-Day Rental Cost: R" + vehicle.calculateRentalCost(2));
+            System.out.println("7-Day Rental Cost: R" + vehicle.calculateRentalCost(7));
+            System.out.println();
+        }
     }
 
     private static void processTransaction (CheckoutService service, PaymentMethod method, double amount){
